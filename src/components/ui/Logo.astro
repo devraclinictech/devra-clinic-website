@@ -1,0 +1,27 @@
+---
+/**
+ * Logo - the Devra brand mark: a teal shield with a white medical cross.
+ * Self-coloured (does not theme-invert) so it stays on-brand on light and
+ * dark backgrounds alike. Size it with the `class` prop.
+ */
+interface Props {
+	class?: string;
+}
+
+const { class: className = "h-9 w-9" } = Astro.props;
+---
+
+<svg
+	class={className}
+	viewBox="0 0 64 64"
+	fill="none"
+	xmlns="http://www.w3.org/2000/svg"
+	role="img"
+	aria-label="Devra Clinic & Diagnostics"
+>
+	<path
+		d="M32 6 L54 15 V33 C54 45 44 53 32 58 C20 53 10 45 10 33 V15 Z"
+		fill="#0d9488"></path>
+	<rect x="28.5" y="22" width="7" height="20" rx="2.5" fill="#fff"></rect>
+	<rect x="22" y="28.5" width="20" height="7" rx="2.5" fill="#fff"></rect>
+</svg>

@@ -1,0 +1,70 @@
+---
+/**
+ * DoctorCard - one specialist: avatar, name, role, qualification, consultation
+ * timings, fee and a list of specialised services. No photos yet, so a
+ * brand-tinted icon avatar stands in.
+ */
+import Icon from "../ui/Icon.astro";
+import type { Doctor } from "../../data/site.ts";
+
+interface Props {
+	doctor: Doctor;
+	index?: number;
+}
+
+const { doctor, index = 0 } = Astro.props;
+---
+
+<article
+	data-reveal
+	style={`--reveal-delay:${index * 90}ms`}
+	class="flex flex-col rounded-card border border-line bg-surface p-6 shadow-card transition duration-200 hover:-translate-y-1 hover:shadow-card-hover"
+>
+	<div class="flex items-start gap-4">
+		<span
+			class="flex h-14 w-14 shrink-0 items-center justify-center rounded-pill bg-brand-tint text-brand"
+		>
+			<Icon name={doctor.icon} class="h-7 w-7" />
+		</span>
+		<div class="min-w-0">
+			<h3 class="text-lg font-bold text-ink">{doctor.name}</h3>
+			<p class="mt-0.5 text-sm font-semibold text-brand">{doctor.role}</p>
+			<p class="mt-1 text-sm text-ink-subtle">{doctor.qualification}</p>
+		</div>
+	</div>
+
+	<div class="mt-5 space-y-2 border-t border-line pt-4 text-sm">
+		{
+			doctor.timings.map((slot) => (
+				<p class="flex items-start gap-2 text-ink-muted">
+					<Icon name="clock" class="mt-0.5 h-4 w-4 shrink-0 text-brand" />
+					<span>{slot}</span>
+				</p>
+			))
+		}
+		{
+			doctor.fee && (
+				<p class="flex items-start gap-2 text-ink-muted">
+					<Icon name="wallet" class="mt-0.5 h-4 w-4 shrink-0 text-brand" />
+					<span>{doctor.fee}</span>
+				</p>
+			)
+		}
+	</div>
+
+	<div class="mt-4">
+		<p class="text-xs font-semibold uppercase tracking-wider text-ink-subtle">
+			Specialised services
+		</p>
+		<ul class="mt-3 grid gap-2 text-sm text-ink">
+			{
+				doctor.specialties.map((item) => (
+					<li class="flex items-start gap-2">
+						<Icon name="check" class="mt-0.5 h-4 w-4 shrink-0 text-brand" />
+						{item}
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</article>

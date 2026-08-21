@@ -1,0 +1,40 @@
+---
+/**
+ * CtaBand - full-width booking call-to-action, reused at the bottom of the
+ * dedicated pages to keep conversion one tap away.
+ */
+import Button from "../ui/Button.astro";
+import Icon from "../ui/Icon.astro";
+import WhatsAppIcon from "../ui/WhatsAppIcon.astro";
+import { clinic } from "../../data/site.ts";
+---
+
+<section class="bg-brand">
+	<div
+		class="mx-auto flex w-full max-w-content flex-col items-start gap-6 px-5 py-12 sm:px-8 md:flex-row md:items-center md:justify-between"
+	>
+		<div>
+			<h2 class="text-2xl font-semibold text-white sm:text-3xl">
+				Ready to visit Devra Clinic?
+			</h2>
+			<p class="mt-2 text-white/90">
+				Walk in during opening hours, or book ahead on WhatsApp.
+			</p>
+		</div>
+		<div class="flex flex-wrap gap-3">
+			<Button
+				href={clinic.whatsappHref}
+				variant="light"
+				size="lg"
+				data-booking-trigger="true"
+			>
+				<WhatsAppIcon class="h-5 w-5" />
+				Book Appointment
+			</Button>
+			<Button href={clinic.phoneHref} variant="outline-light" size="lg">
+				<Icon name="phone" class="h-4 w-4" />
+				Call Now
+			</Button>
+		</div>
+	</div>
+</section>

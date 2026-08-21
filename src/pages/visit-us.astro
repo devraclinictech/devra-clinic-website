@@ -1,0 +1,30 @@
+---
+import Layout from "../layouts/Layout.astro";
+import TopBar from "../components/sections/TopBar.astro";
+import Header from "../components/sections/Header.astro";
+import PageHeader from "../components/sections/PageHeader.astro";
+import ContactInfo from "../components/sections/ContactInfo.astro";
+import Faq from "../components/sections/Faq.astro";
+import Footer from "../components/sections/Footer.astro";
+import BookingModal from "../components/sections/BookingModal.astro";
+---
+
+<Layout
+	title="Visit Us | Devra Clinic & Diagnostics, Ranchi"
+	description="Visit Devra Clinic & Diagnostics at Pitamber Estate, Khelgaon More, Ranchi. Open 7 days: Mon-Sat 8:30 AM-8:00 PM, Sunday 9:00-11:30 AM. Call or book on WhatsApp at +91 77590 48442."
+	faqSchema
+>
+	<TopBar />
+	<Header />
+	<main>
+		<PageHeader
+			crumb="Visit Us"
+			title="Visit Devra Clinic in Ranchi"
+			subtitle="Walk in or book ahead, we're here for you through the week."
+		/>
+		<ContactInfo />
+		<Faq />
+	</main>
+	<Footer />
+	<BookingModal />
+</Layout>

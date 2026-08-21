@@ -1,0 +1,35 @@
+---
+/**
+ * SectionHeading - eyebrow + title + optional subtitle, used to open sections.
+ */
+interface Props {
+	eyebrow?: string;
+	title: string;
+	subtitle?: string;
+	align?: "center" | "left";
+}
+
+const { eyebrow, title, subtitle, align = "center" } = Astro.props;
+
+const alignment = align === "center" ? "text-center mx-auto" : "text-left";
+---
+
+<div data-reveal class={`max-w-2xl ${alignment}`}>
+	{
+		eyebrow && (
+			<p class="text-xs font-semibold uppercase tracking-[0.18em] text-brand">
+				{eyebrow}
+			</p>
+		)
+	}
+	<h2 class="mt-3 text-3xl font-semibold text-ink sm:text-[2.5rem] sm:leading-[1.15]">
+		{title}
+	</h2>
+	{
+		subtitle && (
+			<p class="mt-4 text-base leading-relaxed text-ink-muted sm:text-lg">
+				{subtitle}
+			</p>
+		)
+	}
+</div>

@@ -1,0 +1,29 @@
+---
+import Layout from "../layouts/Layout.astro";
+import TopBar from "../components/sections/TopBar.astro";
+import Header from "../components/sections/Header.astro";
+import PageHeader from "../components/sections/PageHeader.astro";
+import Doctors from "../components/sections/Doctors.astro";
+import CtaBand from "../components/sections/CtaBand.astro";
+import Footer from "../components/sections/Footer.astro";
+import BookingModal from "../components/sections/BookingModal.astro";
+---
+
+<Layout
+	title="Our Doctors in Ranchi | Devra Clinic & Diagnostics"
+	description="Meet the doctors at Devra Clinic, Ranchi: Dr. Rajesh Kumar Singh (Physician & Diabetologist), Dr. Rahul Kumar Singh (Physiotherapist) and Dr. Jayant Raj (Pediatrician), with consultation timings and specialities."
+>
+	<TopBar />
+	<Header />
+	<main>
+		<PageHeader
+			crumb="Doctors"
+			title="Our Medical Specialists"
+			subtitle="Qualified, approachable specialists across medicine, physiotherapy and paediatrics."
+		/>
+		<Doctors emitSchema />
+		<CtaBand />
+	</main>
+	<Footer />
+	<BookingModal />
+</Layout>

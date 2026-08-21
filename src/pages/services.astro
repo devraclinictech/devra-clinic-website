@@ -1,0 +1,31 @@
+---
+import Layout from "../layouts/Layout.astro";
+import TopBar from "../components/sections/TopBar.astro";
+import Header from "../components/sections/Header.astro";
+import PageHeader from "../components/sections/PageHeader.astro";
+import Services from "../components/sections/Services.astro";
+import TrustStrip from "../components/sections/TrustStrip.astro";
+import CtaBand from "../components/sections/CtaBand.astro";
+import Footer from "../components/sections/Footer.astro";
+import BookingModal from "../components/sections/BookingModal.astro";
+---
+
+<Layout
+	title="Healthcare Services in Ranchi | Devra Clinic & Diagnostics"
+	description="Explore Devra Clinic's services in Ranchi: advanced physiotherapy with Class 3B laser therapy, physician consultations, diagnostics & pathology, pharmacy, adult vaccination and dietician consultation."
+>
+	<TopBar />
+	<Header />
+	<main>
+		<PageHeader
+			crumb="Services"
+			title="Our Services"
+			subtitle="Comprehensive care for your whole family, all under one roof in Ranchi."
+		/>
+		<Services />
+		<TrustStrip />
+		<CtaBand />
+	</main>
+	<Footer />
+	<BookingModal />
+</Layout>

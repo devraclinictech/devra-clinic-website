@@ -1,0 +1,26 @@
+---
+/**
+ * MoreLink - a "view details" style link with a trailing arrow. Used on the
+ * homepage to send visitors from an overview section to its dedicated page.
+ */
+import Icon from "./Icon.astro";
+
+interface Props {
+	href: string;
+	label: string;
+	class?: string;
+}
+
+const { href, label, class: className = "" } = Astro.props;
+---
+
+<a
+	href={href}
+	class={`group inline-flex items-center gap-1.5 text-sm font-semibold text-brand transition-colors hover:text-brand-dark ${className}`}
+>
+	{label}
+	<Icon
+		name="arrow-right"
+		class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
+	/>
+</a>

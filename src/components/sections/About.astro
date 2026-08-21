@@ -1,0 +1,101 @@
+---
+/**
+ * About - the clinic's real story and mission, with headline stats. Builds
+ * trust and carries the Ranchi keyword naturally for local SEO.
+ */
+import Section from "../ui/Section.astro";
+import Icon from "../ui/Icon.astro";
+import MoreLink from "../ui/MoreLink.astro";
+import { clinic, stats } from "../../data/site.ts";
+
+interface Props {
+	detailsHref?: string;
+}
+
+const { detailsHref } = Astro.props;
+
+const highlights = [
+	"Ethical, evidence-based care",
+	"Patient-centred approach",
+	"Advanced physiotherapy & laser therapy",
+	"In-house pathology lab & pharmacy",
+	"Affordable, transparent pricing",
+	"Open 7 days a week",
+];
+---
+
+<Section id="about" tone="alt">
+	<div data-reveal class="grid gap-12 lg:grid-cols-2 lg:items-center">
+		<div>
+			<p class="text-xs font-semibold uppercase tracking-[0.18em] text-brand">
+				About the clinic
+			</p>
+			<h2 class="mt-3 text-3xl font-semibold text-ink sm:text-[2.5rem] sm:leading-[1.15]">
+				Family healthcare, rooted in Ranchi since {clinic.establishedYear}
+			</h2>
+			<p class="mt-5 text-lg leading-relaxed text-ink-muted">
+				{clinic.intro}
+			</p>
+			<p class="mt-4 leading-relaxed text-ink-muted">
+				Established in {clinic.establishedYear}, Devra Clinic & Diagnostics began
+				as a multidisciplinary healthcare clinic with a vision to make quality
+				healthcare accessible to everyone. Our mission is to provide ethical,
+				affordable, evidence-based and patient-centred care with compassion and
+				excellence.
+			</p>
+
+			<dl class="mt-8 grid grid-cols-3 gap-6">
+				<div>
+					<dt class="text-sm font-medium text-ink-muted">Patients served</dt>
+					<dd class="mt-1 text-2xl font-extrabold text-brand">
+						{stats.patientsServed}
+					</dd>
+				</div>
+				<div>
+					<dt class="text-sm font-medium text-ink-muted">Years of care</dt>
+					<dd class="mt-1 text-2xl font-extrabold text-brand">
+						{stats.yearsServing}
+					</dd>
+				</div>
+				<div>
+					<dt class="text-sm font-medium text-ink-muted">Since</dt>
+					<dd class="mt-1 text-2xl font-extrabold text-brand">
+						{clinic.establishedYear}
+					</dd>
+				</div>
+			</dl>
+
+			<p class="mt-6 text-sm text-ink-muted">
+				Trusted by patients across {stats.regions}.
+			</p>
+
+			{detailsHref && <MoreLink href={detailsHref} label="Read more about us" class="mt-6" />}
+		</div>
+
+		<div class="rounded-card border border-line bg-surface p-7">
+			<h3 class="flex items-center gap-2 text-lg font-bold text-ink">
+				<Icon name="clinic" class="h-5 w-5 text-brand" />
+				What to expect at Devra Clinic
+			</h3>
+			<ul class="mt-5 grid gap-3 sm:grid-cols-2">
+				{
+					highlights.map((item) => (
+						<li class="flex items-start gap-2.5 text-sm text-ink">
+							<Icon name="check" class="mt-0.5 h-4 w-4 shrink-0 text-brand" />
+							{item}
+						</li>
+					))
+				}
+			</ul>
+			<a
+				href={clinic.gmbHref}
+				target="_blank"
+				rel="noopener"
+				class="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:text-brand-dark"
+			>
+				See us on Google
+				<Icon name="arrow-right" class="h-4 w-4" />
+			</a>
+		</div>
+	</div>
+</Section>

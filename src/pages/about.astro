@@ -1,0 +1,31 @@
+---
+import Layout from "../layouts/Layout.astro";
+import TopBar from "../components/sections/TopBar.astro";
+import Header from "../components/sections/Header.astro";
+import PageHeader from "../components/sections/PageHeader.astro";
+import About from "../components/sections/About.astro";
+import TrustStrip from "../components/sections/TrustStrip.astro";
+import CtaBand from "../components/sections/CtaBand.astro";
+import Footer from "../components/sections/Footer.astro";
+import BookingModal from "../components/sections/BookingModal.astro";
+---
+
+<Layout
+	title="About Devra Clinic & Diagnostics, Ranchi"
+	description="Established in 2019, Devra Clinic & Diagnostics has served 13,000+ patients across Jharkhand, Bihar and West Bengal with ethical, affordable, evidence-based and patient-centred healthcare in Ranchi."
+>
+	<TopBar />
+	<Header />
+	<main>
+		<PageHeader
+			crumb="About"
+			title="About Devra Clinic"
+			subtitle="One of Ranchi's trusted healthcare centres since 2019."
+		/>
+		<About />
+		<TrustStrip />
+		<CtaBand />
+	</main>
+	<Footer />
+	<BookingModal />
+</Layout>

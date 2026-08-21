@@ -1,0 +1,59 @@
+---
+import Layout from "../layouts/Layout.astro";
+import TopBar from "../components/sections/TopBar.astro";
+import Header from "../components/sections/Header.astro";
+import Footer from "../components/sections/Footer.astro";
+import BookingModal from "../components/sections/BookingModal.astro";
+import Button from "../components/ui/Button.astro";
+import Icon from "../components/ui/Icon.astro";
+import { clinic, nav } from "../data/site.ts";
+---
+
+<Layout
+	title="Page not found | Devra Clinic & Diagnostics"
+	description="The page you were looking for could not be found. Explore Devra Clinic & Diagnostics in Ranchi."
+	noindex
+>
+	<TopBar />
+	<Header />
+	<main
+		class="mx-auto flex w-full max-w-content flex-col items-center px-5 py-24 text-center sm:px-8 sm:py-32"
+	>
+		<p class="text-sm font-semibold uppercase tracking-[0.18em] text-brand">
+			404
+		</p>
+		<h1 class="mt-3 text-3xl font-semibold text-ink sm:text-4xl">
+			We couldn't find that page
+		</h1>
+		<p class="mt-4 max-w-xl text-lg leading-relaxed text-ink-muted">
+			The link may be broken or the page may have moved. Let's get you back to
+			the care you need.
+		</p>
+
+		<div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+			<Button href="/" size="lg">
+				<Icon name="clinic" class="h-4 w-4" />
+				Back to home
+			</Button>
+			<Button href={clinic.phoneHref} variant="outline" size="lg">
+				<Icon name="phone" class="h-4 w-4" />
+				Call {clinic.phoneDisplay}
+			</Button>
+		</div>
+
+		<nav
+			aria-label="Helpful links"
+			class="mt-10 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium text-ink-muted"
+		>
+			{
+				nav.map((item) => (
+					<a href={item.page} class="transition-colors hover:text-brand">
+						{item.label}
+					</a>
+				))
+			}
+		</nav>
+	</main>
+	<Footer />
+	<BookingModal />
+</Layout>

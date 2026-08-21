@@ -1,0 +1,45 @@
+---
+/**
+ * Button - link styled as a button. Variants and sizes keep CTAs consistent.
+ */
+interface Props {
+	href: string;
+	variant?: "primary" | "outline" | "ghost" | "light" | "outline-light";
+	size?: "md" | "lg";
+	class?: string;
+	[key: string]: unknown;
+}
+
+const {
+	href,
+	variant = "primary",
+	size = "md",
+	class: className = "",
+	...rest
+} = Astro.props;
+
+const base =
+	"inline-flex items-center justify-center gap-2 rounded-pill font-semibold transition-colors duration-200 focus-visible:outline-none";
+
+const variants = {
+	primary: "bg-brand text-white hover:bg-brand-dark",
+	outline: "border border-brand text-brand hover:bg-brand-tint",
+	ghost: "text-ink hover:text-brand",
+	// For use on brand-coloured backgrounds:
+	light: "bg-white text-brand-dark hover:bg-white/90",
+	"outline-light": "border border-white text-white hover:bg-white/10",
+};
+
+const sizes = {
+	md: "px-5 py-2.5 text-sm",
+	lg: "px-7 py-3.5 text-base",
+};
+---
+
+<a
+	href={href}
+	class={`${base} ${variants[variant]} ${sizes[size]} ${className}`}
+	{...rest}
+>
+	<slot />
+</a>

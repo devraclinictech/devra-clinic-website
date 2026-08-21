@@ -1,0 +1,21 @@
+---
+/**
+ * LanguageToggle - English / Hindi segmented switch. Markup only; the switching
+ * logic is wired once in Layout.astro (it finds every [data-set-lang] button).
+ * Marked data-no-i18n so the switch labels themselves are never translated.
+ */
+---
+
+<div
+	class="inline-flex items-center rounded-pill border border-line p-0.5 text-xs font-semibold"
+	role="group"
+	aria-label="Language / भाषा"
+	data-no-i18n
+>
+	<button type="button" data-set-lang="en" class="lang-btn rounded-pill px-2.5 py-1">
+		EN
+	</button>
+	<button type="button" data-set-lang="hi" class="lang-btn rounded-pill px-2.5 py-1">
+		हिंदी
+	</button>
+</div>

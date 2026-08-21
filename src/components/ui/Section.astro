@@ -1,0 +1,25 @@
+---
+/**
+ * Section - consistent vertical rhythm and centered, max-width content.
+ * `tone` switches the background; `id` enables anchor navigation.
+ */
+interface Props {
+	id?: string;
+	tone?: "surface" | "alt" | "tint";
+	class?: string;
+}
+
+const { id, tone = "surface", class: className = "" } = Astro.props;
+
+const tones = {
+	surface: "bg-surface",
+	alt: "bg-surface-alt",
+	tint: "bg-brand-tint",
+};
+---
+
+<section id={id} class={`py-16 sm:py-20 lg:py-24 ${tones[tone]} ${className}`}>
+	<div class="mx-auto w-full max-w-content px-5 sm:px-8">
+		<slot />
+	</div>
+</section>

@@ -1,0 +1,36 @@
+---
+/**
+ * Services - responsive grid of all clinic services.
+ */
+import Section from "../ui/Section.astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+import ServiceCard from "./ServiceCard.astro";
+import MoreLink from "../ui/MoreLink.astro";
+import { services } from "../../data/site.ts";
+
+interface Props {
+	detailsHref?: string;
+}
+
+const { detailsHref } = Astro.props;
+---
+
+<Section id="services" tone="alt">
+	<SectionHeading
+		eyebrow="What we offer"
+		title="Complete healthcare in Ranchi, under one roof"
+		subtitle="From advanced physiotherapy and consultations to diagnostics, vaccination and medicines, we cover the essentials your family needs most."
+	/>
+
+	<div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+		{services.map((service, i) => <ServiceCard service={service} index={i} />)}
+	</div>
+
+	{
+		detailsHref && (
+			<div class="mt-10 text-center">
+				<MoreLink href={detailsHref} label="View all services" />
+			</div>
+		)
+	}
+</Section>

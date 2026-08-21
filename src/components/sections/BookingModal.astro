@@ -1,0 +1,318 @@
+---
+/**
+ * BookingModal - native <dialog> that collects patient details and opens
+ * WhatsApp with a pre-filled message built from the form values.
+ *
+ * Trigger it from anywhere by adding `data-booking-trigger` to a link/button.
+ * Optionally add `data-service="<service name>"` on the trigger to pre-select
+ * that service (e.g. a physiotherapy package button).
+ *
+ * The trigger's own href (the plain wa.me link) is the no-JS fallback: if the
+ * script never runs, clicking still opens WhatsApp normally.
+ */
+import Icon from "../ui/Icon.astro";
+import WhatsAppIcon from "../ui/WhatsAppIcon.astro";
+import { clinic, services } from "../../data/site.ts";
+
+const field =
+	"w-full rounded-card border border-line bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-subtle transition focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25";
+---
+
+<dialog
+	id="booking-dialog"
+	data-whatsapp={clinic.whatsappNumber}
+	class="m-auto w-[calc(100%-1.5rem)] max-w-lg max-h-[92dvh] overflow-y-auto rounded-card border border-line bg-surface p-0 shadow-card"
+	aria-labelledby="booking-title"
+>
+	<!-- header -->
+	<div class="flex items-start gap-4 border-b border-line bg-brand-tint px-6 py-5">
+		<span
+			class="flex h-11 w-11 shrink-0 items-center justify-center rounded-card bg-brand text-white shadow-card"
+		>
+			<WhatsAppIcon class="h-6 w-6" />
+		</span>
+		<div class="min-w-0">
+			<h2 id="booking-title" class="text-xl font-bold text-ink">
+				Book an appointment
+			</h2>
+			<p class="mt-1 text-sm text-ink-muted">
+				Share a few details and we'll confirm your slot on WhatsApp.
+			</p>
+		</div>
+		<button
+			id="bk-close"
+			type="button"
+			class="-mr-1 -mt-1 ml-auto flex h-9 w-9 shrink-0 items-center justify-center rounded-pill text-ink-muted transition-colors hover:bg-surface hover:text-ink"
+			aria-label="Close"
+		>
+			<Icon name="close" class="h-5 w-5" />
+		</button>
+	</div>
+
+	<form id="booking-form" class="grid gap-4 px-6 py-6" novalidate>
+		<div class="grid gap-4 sm:grid-cols-2">
+			<div class="grid gap-1.5">
+				<label for="bk-name" class="text-sm font-semibold text-ink">
+					Patient name <span class="text-brand">*</span>
+				</label>
+				<input
+					id="bk-name"
+					name="name"
+					type="text"
+					required
+					autocomplete="name"
+					placeholder="Full name"
+					aria-describedby="bk-name-error"
+					class={field}
+				/>
+				<p
+					id="bk-name-error"
+					class="hidden text-xs font-medium text-red-600"
+				>
+				</p>
+			</div>
+
+			<div class="grid gap-1.5">
+				<label for="bk-phone" class="text-sm font-semibold text-ink">
+					Phone number <span class="text-brand">*</span>
+				</label>
+				<input
+					id="bk-phone"
+					name="phone"
+					type="tel"
+					required
+					inputmode="tel"
+					autocomplete="tel"
+					placeholder="e.g. 98765 43210"
+					aria-describedby="bk-phone-error"
+					class={field}
+				/>
+				<p
+					id="bk-phone-error"
+					class="hidden text-xs font-medium text-red-600"
+				>
+				</p>
+			</div>
+		</div>
+
+		<div class="grid gap-1.5">
+			<label for="bk-service" class="text-sm font-semibold text-ink">
+				Service
+			</label>
+			<select id="bk-service" name="service" class={field}>
+				<option value="">Choose a service (optional)</option>
+				{services.map((s) => <option value={s.name}>{s.name}</option>)}
+				<option value="General enquiry">General enquiry</option>
+			</select>
+		</div>
+
+		<div class="grid gap-4 sm:grid-cols-2">
+			<div class="grid gap-1.5">
+				<label for="bk-date" class="text-sm font-semibold text-ink">
+					Preferred date
+				</label>
+				<input id="bk-date" name="date" type="date" class={field} />
+			</div>
+			<div class="grid gap-1.5">
+				<label for="bk-time" class="text-sm font-semibold text-ink">
+					Preferred time
+				</label>
+				<input id="bk-time" name="time" type="time" class={field} />
+			</div>
+		</div>
+
+		<div class="grid gap-1.5">
+			<label for="bk-notes" class="text-sm font-semibold text-ink">
+				Notes <span class="font-normal text-ink-subtle">(optional)</span>
+			</label>
+			<textarea
+				id="bk-notes"
+				name="notes"
+				rows="3"
+				placeholder="Symptoms, preferred doctor, or anything else."
+				class={`${field} resize-none`}></textarea>
+		</div>
+
+		<button
+			type="submit"
+			class="mt-1 inline-flex items-center justify-center gap-2 rounded-pill bg-brand px-7 py-3.5 text-base font-semibold text-white transition-colors hover:bg-brand-dark"
+		>
+			<WhatsAppIcon class="h-5 w-5" />
+			Continue on WhatsApp
+		</button>
+	</form>
+
+	<!-- reassurance footer -->
+	<div
+		class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-line bg-surface-alt px-6 py-4 text-xs text-ink-muted"
+	>
+		<span class="inline-flex items-center gap-1.5">
+			<Icon name="shield" class="h-4 w-4 text-brand" />
+			No payment needed to book.
+		</span>
+		<span>
+			Prefer to call?
+			<a
+				href={clinic.phoneHref}
+				class="font-semibold text-brand hover:text-brand-dark"
+			>
+				{clinic.phoneDisplay}
+			</a>
+		</span>
+	</div>
+</dialog>
+
+<script>
+	const dialog = document.getElementById(
+		"booking-dialog",
+	) as HTMLDialogElement | null;
+	const form = document.getElementById("booking-form") as HTMLFormElement | null;
+
+	if (dialog && form) {
+		const number = dialog.dataset.whatsapp ?? "";
+		const reduce = window.matchMedia(
+			"(prefers-reduced-motion: reduce)",
+		).matches;
+
+		const nameInput = form.elements.namedItem("name") as HTMLInputElement;
+		const phoneInput = form.elements.namedItem("phone") as HTMLInputElement;
+		const serviceSel = form.elements.namedItem("service") as HTMLSelectElement;
+		const dateInput = form.elements.namedItem("date") as HTMLInputElement;
+		const nameError = document.getElementById("bk-name-error");
+		const phoneError = document.getElementById("bk-phone-error");
+
+		let lastTrigger: HTMLElement | null = null;
+
+		// Pick a message in the currently active language.
+		const t = (en: string, hiStr: string) =>
+			document.documentElement.getAttribute("data-lang") === "hi" ? hiStr : en;
+
+		const setError = (
+			input: HTMLInputElement,
+			msgEl: HTMLElement | null,
+			message: string,
+		) => {
+			input.setAttribute("aria-invalid", "true");
+			input.classList.remove("border-line");
+			input.classList.add("border-red-500");
+			if (msgEl) {
+				msgEl.textContent = message;
+				msgEl.classList.remove("hidden");
+			}
+		};
+
+		const clearError = (
+			input: HTMLInputElement,
+			msgEl: HTMLElement | null,
+		) => {
+			input.removeAttribute("aria-invalid");
+			input.classList.remove("border-red-500");
+			input.classList.add("border-line");
+			if (msgEl) msgEl.classList.add("hidden");
+		};
+
+		nameInput.addEventListener("input", () => clearError(nameInput, nameError));
+		phoneInput.addEventListener("input", () =>
+			clearError(phoneInput, phoneError),
+		);
+
+		const openDialog = (event: Event) => {
+			event.preventDefault();
+			lastTrigger = event.currentTarget as HTMLElement;
+			clearError(nameInput, nameError);
+			clearError(phoneInput, phoneError);
+
+			const preset = lastTrigger?.dataset.service ?? "";
+			serviceSel.value = [...serviceSel.options].some((o) => o.value === preset)
+				? preset
+				: "";
+
+			// Prevent picking a past date.
+			dateInput.min = new Date().toISOString().slice(0, 10);
+
+			dialog.showModal();
+			document.body.style.overflow = "hidden";
+			requestAnimationFrame(() => dialog.classList.add("is-open"));
+			nameInput.focus();
+		};
+
+		const closeDialog = () => {
+			dialog.classList.remove("is-open");
+			document.body.style.overflow = "";
+			window.setTimeout(
+				() => {
+					if (dialog.open) dialog.close();
+					lastTrigger?.focus();
+				},
+				reduce ? 0 : 250,
+			);
+		};
+
+		document
+			.querySelectorAll<HTMLElement>("[data-booking-trigger]")
+			.forEach((el) => el.addEventListener("click", openDialog));
+
+		document.getElementById("bk-close")?.addEventListener("click", closeDialog);
+		dialog.addEventListener("click", (event) => {
+			if (event.target === dialog) closeDialog();
+		});
+		dialog.addEventListener("cancel", (event) => {
+			event.preventDefault();
+			closeDialog();
+		});
+
+		const line = (label: string, value: string) =>
+			value.trim() ? `${label}: ${value.trim()}\n` : "";
+
+		form.addEventListener("submit", (event) => {
+			event.preventDefault();
+			const name = nameInput.value.trim();
+			const phone = phoneInput.value.trim();
+			const digits = phone.replace(/\D/g, "");
+			let firstInvalid: HTMLInputElement | null = null;
+
+			if (!name) {
+				setError(
+					nameInput,
+					nameError,
+					t("Please enter the patient's name.", "कृपया मरीज़ का नाम भरें।"),
+				);
+				firstInvalid = firstInvalid ?? nameInput;
+			}
+			if (!phone) {
+				setError(
+					phoneInput,
+					phoneError,
+					t("Please enter a phone number.", "कृपया फ़ोन नंबर भरें।"),
+				);
+				firstInvalid = firstInvalid ?? phoneInput;
+			} else if (digits.length < 10) {
+				setError(
+					phoneInput,
+					phoneError,
+					t("Please enter a valid phone number.", "कृपया सही फ़ोन नंबर भरें।"),
+				);
+				firstInvalid = firstInvalid ?? phoneInput;
+			}
+
+			if (firstInvalid) {
+				firstInvalid.focus();
+				return;
+			}
+
+			const data = new FormData(form);
+			let message = "Hello Devra Clinic, I'd like to book an appointment.\n\n";
+			message += line("Name", name);
+			message += line("Phone", phone);
+			message += line("Service", String(data.get("service") ?? ""));
+			message += line("Preferred date", String(data.get("date") ?? ""));
+			message += line("Preferred time", String(data.get("time") ?? ""));
+			message += line("Notes", String(data.get("notes") ?? ""));
+
+			const url = `https://wa.me/${number}?text=${encodeURIComponent(message.trim())}`;
+			window.open(url, "_blank", "noopener");
+			closeDialog();
+			form.reset();
+		});
+	}
+</script>

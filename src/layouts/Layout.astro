@@ -1,23 +1,337 @@
+---
+import "../styles/global.css";
+import { clinic, hours, faqs, seo, physioPackages } from "../data/site.ts";
+
+interface Props {
+	title?: string;
+	description?: string;
+	/** Social share image path (defaults to the site OG image). */
+	image?: string;
+	/** Emit FAQPage JSON-LD. Only true on pages that actually render the FAQ. */
+	faqSchema?: boolean;
+	/** Keep the page out of the index (e.g. the 404 page). */
+	noindex?: boolean;
+}
+
+const {
+	title = seo.title,
+	description = seo.description,
+	image = seo.ogImage,
+	faqSchema: includeFaqSchema = false,
+	noindex = false,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, seo.siteUrl).href;
+const ogImageUrl = new URL(image, seo.siteUrl).href;
+const fullStreet = `${clinic.address.line1}, ${clinic.address.line2}`;
+
+const priceNum = (s: string) =>
+	Number(String(s).replace(/[^0-9]/g, "")) || undefined;
+
+// MedicalClinic structured data for Google local search.
+const clinicSchema = {
+	"@context": "https://schema.org",
+	"@type": "MedicalClinic",
+	"@id": `${seo.siteUrl}/#clinic`,
+	name: clinic.name,
+	url: seo.siteUrl,
+	image: `${seo.siteUrl}/favicon.svg`,
+	telephone: clinic.phoneHref.replace("tel:", ""),
+	email: clinic.email,
+	foundingDate: clinic.establishedYear,
+	priceRange: "₹₹",
+	currenciesAccepted: "INR",
+	sameAs: [clinic.gmbHref],
+	address: {
+		"@type": "PostalAddress",
+		streetAddress: fullStreet,
+		addressLocality: clinic.address.locality,
+		addressRegion: clinic.address.region,
+		postalCode: clinic.address.postalCode,
+		addressCountry: clinic.address.country,
+	},
+	areaServed: { "@type": "City", name: "Ranchi" },
+	geo: {
+		"@type": "GeoCoordinates",
+		latitude: clinic.geo.latitude,
+		longitude: clinic.geo.longitude,
+	},
+	hasMap: clinic.mapsHref,
+	availableService: [
+		{ "@type": "MedicalTherapy", name: "Advanced Physiotherapy & Rehabilitation" },
+		{ "@type": "MedicalProcedure", name: "Physician Consultation" },
+		{ "@type": "MedicalTest", name: "Diagnostics & Pathology" },
+		{ "@type": "MedicalProcedure", name: "Adult Vaccination" },
+		{ "@type": "MedicalProcedure", name: "Pharmacy" },
+		{ "@type": "MedicalProcedure", name: "Dietician Consultation" },
+	],
+	openingHoursSpecification: hours.map((h) => ({
+		"@type": "OpeningHoursSpecification",
+		dayOfWeek: h.days,
+		opens: h.opens,
+		closes: h.closes,
+	})),
+	makesOffer: [
+		...physioPackages.map((p) => ({
+			"@type": "Offer",
+			name: `Physiotherapy: ${p.name}`,
+			price: priceNum(p.price),
+			priceCurrency: "INR",
+		})),
+		{
+			"@type": "Offer",
+			name: "Physician consultation",
+			price: 800,
+			priceCurrency: "INR",
+		},
+	],
+};
+
+const websiteSchema = {
+	"@context": "https://schema.org",
+	"@type": "WebSite",
+	name: clinic.name,
+	url: seo.siteUrl,
+	inLanguage: "en-IN",
+	publisher: { "@id": `${seo.siteUrl}/#clinic` },
+};
+
+const faqSchema = {
+	"@context": "https://schema.org",
+	"@type": "FAQPage",
+	mainEntity: faqs.map((f) => ({
+		"@type": "Question",
+		name: f.question,
+		acceptedAnswer: { "@type": "Answer", text: f.answer },
+	})),
+};
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" href="/favicon.svg" />
+		<link rel="manifest" href="/site.webmanifest" />
+		<meta name="theme-color" content="#0d9488" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+
+		<!-- Flag JS early so reveal animations never leave content hidden. -->
+		<script is:inline>
+			document.documentElement.classList.add("has-js");
+		</script>
+
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta name="keywords" content={seo.keywords.join(", ")} />
+		<meta name="author" content={clinic.name} />
+		<meta
+			name="robots"
+			content={noindex
+				? "noindex, follow"
+				: "index, follow, max-image-preview:large, max-snippet:-1"}
+		/>
+		<link rel="canonical" href={canonical} />
+
+		<!-- Local / geo signals -->
+		<meta name="geo.region" content="IN-JH" />
+		<meta name="geo.placename" content="Ranchi, Jharkhand" />
+
+		<!-- Open Graph -->
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={clinic.name} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:locale" content="en_IN" />
+		<meta property="og:image" content={ogImageUrl} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:type" content="image/png" />
+		<meta property="og:image:alt" content={`${clinic.name}, Ranchi`} />
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImageUrl} />
+
+		<!-- Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+
+		<!-- Structured data -->
+		<script
+			type="application/ld+json"
+			set:html={JSON.stringify(clinicSchema)}
+		/>
+		<script
+			type="application/ld+json"
+			set:html={JSON.stringify(websiteSchema)}
+		/>
+		{
+			includeFaqSchema && (
+				<script
+					type="application/ld+json"
+					set:html={JSON.stringify(faqSchema)}
+				/>
+			)
+		}
 	</head>
 	<body>
 		<slot />
+
+		<!-- Reveal elements as they scroll into view. Robust by design: if the
+		     observer never fires (unsupported, reduced motion, or a rendering
+		     quirk), everything is revealed so content is never stuck hidden. -->
+		<script>
+			const items = document.querySelectorAll<HTMLElement>("[data-reveal]");
+			const revealAll = () =>
+				items.forEach((el) => el.classList.add("is-visible"));
+			const reduce = window.matchMedia(
+				"(prefers-reduced-motion: reduce)",
+			).matches;
+
+			if (reduce || !("IntersectionObserver" in window)) {
+				revealAll();
+			} else {
+				let fired = false;
+				const io = new IntersectionObserver(
+					(entries) => {
+						fired = true;
+						entries.forEach((entry) => {
+							if (entry.isIntersecting) {
+								entry.target.classList.add("is-visible");
+								io.unobserve(entry.target);
+							}
+						});
+					},
+					{ rootMargin: "0px 0px -10% 0px", threshold: 0 },
+				);
+				items.forEach((el) => io.observe(el));
+				// Safety net: if the observer hasn't fired shortly after load,
+				// assume it won't and just show everything.
+				window.setTimeout(() => {
+					if (!fired) revealAll();
+				}, 1200);
+			}
+		</script>
+
+		<!-- Language switch: English <-> Hindi, applied over the English DOM. -->
+		<script>
+			import { hi } from "../data/i18n.ts";
+
+			const KEY = "devra-lang";
+			const root = document.documentElement;
+			const originals = new Map<Node, string>();
+
+			const excluded = (node: Node) => {
+				let el = node.parentElement;
+				while (el) {
+					const tag = el.tagName;
+					if (tag === "SCRIPT" || tag === "STYLE" || tag === "NOSCRIPT")
+						return true;
+					if (el.hasAttribute("data-no-i18n")) return true;
+					el = el.parentElement;
+				}
+				return false;
+			};
+
+			const collectText = () => {
+				const walker = document.createTreeWalker(
+					document.body,
+					NodeFilter.SHOW_TEXT,
+					{
+						acceptNode(node) {
+							if (!node.nodeValue || !node.nodeValue.trim())
+								return NodeFilter.FILTER_REJECT;
+							return excluded(node)
+								? NodeFilter.FILTER_REJECT
+								: NodeFilter.FILTER_ACCEPT;
+						},
+					},
+				);
+				const out: Text[] = [];
+				let n: Node | null;
+				while ((n = walker.nextNode())) out.push(n as Text);
+				return out;
+			};
+
+			const applyHindi = () => {
+				collectText().forEach((node) => {
+					const key = (node.nodeValue ?? "").trim();
+					const val = hi[key];
+					if (val) {
+						if (!originals.has(node)) originals.set(node, node.nodeValue ?? "");
+						node.nodeValue = (node.nodeValue ?? "").replace(key, val);
+					}
+				});
+				document
+					.querySelectorAll<HTMLElement>("[placeholder]")
+					.forEach((el) => {
+						if (excluded(el)) return;
+						const key = (el.getAttribute("placeholder") ?? "").trim();
+						const val = hi[key];
+						if (val) {
+							if (!originals.has(el))
+								originals.set(el, el.getAttribute("placeholder") ?? "");
+							el.setAttribute("placeholder", val);
+						}
+					});
+			};
+
+			const restoreEnglish = () => {
+				originals.forEach((value, node) => {
+					if (node.nodeType === Node.TEXT_NODE) (node as Text).nodeValue = value;
+					else (node as HTMLElement).setAttribute("placeholder", value);
+				});
+				originals.clear();
+			};
+
+			const setLang = (lang: string, persist: boolean) => {
+				if (lang === "hi") {
+					root.setAttribute("data-lang", "hi");
+					root.lang = "hi";
+					applyHindi();
+				} else {
+					root.setAttribute("data-lang", "en");
+					root.lang = "en";
+					restoreEnglish();
+				}
+				document
+					.querySelectorAll<HTMLElement>("[data-set-lang]")
+					.forEach((b) =>
+						b.setAttribute(
+							"aria-pressed",
+							String(b.getAttribute("data-set-lang") === lang),
+						),
+					);
+				if (persist) {
+					try {
+						localStorage.setItem(KEY, lang);
+					} catch (e) {}
+				}
+			};
+
+			document
+				.querySelectorAll<HTMLElement>("[data-set-lang]")
+				.forEach((b) =>
+					b.addEventListener("click", () =>
+						setLang(b.getAttribute("data-set-lang") ?? "en", true),
+					),
+				);
+
+			let saved = "en";
+			try {
+				saved = localStorage.getItem(KEY) ?? "en";
+			} catch (e) {}
+			setLang(saved === "hi" ? "hi" : "en", false);
+		</script>
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

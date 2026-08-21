@@ -1,0 +1,36 @@
+---
+/**
+ * TrustStrip - a band of concrete credibility signals confirmed by the clinic:
+ * years serving, patients treated, laser therapy and the in-house lab.
+ */
+import Icon from "../ui/Icon.astro";
+import { trustPoints } from "../../data/site.ts";
+---
+
+<section class="border-y border-line bg-brand-tint">
+	<div class="mx-auto w-full max-w-content px-5 py-8 sm:px-8">
+		<ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+			{
+				trustPoints.map((item, i) => (
+					<li
+						data-reveal
+						style={`--reveal-delay:${i * 80}ms`}
+						class="flex items-start gap-3"
+					>
+						<span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-card bg-surface text-brand shadow-card">
+							<Icon name={item.icon} class="h-5 w-5" />
+						</span>
+						<span class="min-w-0">
+							<span class="block text-sm font-bold text-ink">
+								{item.title}
+							</span>
+							<span class="block text-sm text-ink-muted">
+								{item.description}
+							</span>
+						</span>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>

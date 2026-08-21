@@ -1,0 +1,113 @@
+---
+/**
+ * Testimonials - patient social proof. Cards come from the `testimonials` data.
+ * Review / AggregateRating JSON-LD is emitted only when `testimonialsPublished`
+ * is true, so we never mark up placeholder or non-displayed reviews.
+ */
+import Section from "../ui/Section.astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+import {
+	testimonials,
+	testimonialsPublished,
+	clinic,
+	seo,
+} from "../../data/site.ts";
+
+const starPath =
+	"M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z";
+
+const avg =
+	testimonials.reduce((sum, t) => sum + t.rating, 0) / testimonials.length;
+
+const reviewSchema = {
+	"@context": "https://schema.org",
+	"@type": "MedicalClinic",
+	"@id": `${seo.siteUrl}/#clinic`,
+	name: clinic.name,
+	aggregateRating: {
+		"@type": "AggregateRating",
+		ratingValue: Number(avg.toFixed(1)),
+		reviewCount: testimonials.length,
+		bestRating: 5,
+	},
+	review: testimonials.map((t) => ({
+		"@type": "Review",
+		author: { "@type": "Person", name: t.name },
+		reviewRating: {
+			"@type": "Rating",
+			ratingValue: t.rating,
+			bestRating: 5,
+		},
+		reviewBody: t.quote,
+	})),
+};
+---
+
+<Section id="testimonials" tone="alt">
+	<SectionHeading
+		eyebrow="Patient stories"
+		title="What patients in Ranchi say"
+		subtitle="Real experiences from the families we care for. We're grateful for their trust."
+	/>
+
+	<div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+		{
+			testimonials.map((t, i) => (
+				<figure
+					data-reveal
+					style={`--reveal-delay:${i * 80}ms`}
+					class="flex flex-col rounded-card border border-line bg-surface p-6 shadow-card"
+				>
+					<div
+						class="flex gap-0.5 text-brand"
+						role="img"
+						aria-label={`${t.rating} out of 5 stars`}
+					>
+						{Array.from({ length: 5 }).map((_, s) => (
+							<svg
+								class="h-4 w-4"
+								viewBox="0 0 24 24"
+								fill={s < t.rating ? "currentColor" : "none"}
+								stroke="currentColor"
+								stroke-width="1.5"
+								stroke-linejoin="round"
+								aria-hidden="true"
+								set:html={`<path d="${starPath}" />`}
+							/>
+						))}
+					</div>
+					<blockquote class="mt-4 flex-1 text-sm leading-relaxed text-ink-muted">
+						“{t.quote}”
+					</blockquote>
+					<figcaption class="mt-5 border-t border-line pt-4">
+						<div class="text-sm font-bold text-ink">{t.name}</div>
+						{t.service && (
+							<div class="mt-0.5 text-xs text-ink-subtle">{t.service}</div>
+						)}
+					</figcaption>
+				</figure>
+			))
+		}
+	</div>
+
+	<p class="mt-8 text-center text-sm text-ink-muted">
+		Cared for by Devra Clinic? &nbsp;
+		<a
+			href={clinic.reviewHref}
+			target="_blank"
+			rel="noopener"
+			class="font-semibold text-brand hover:text-brand-dark"
+		>
+			Leave us a review on Google
+		</a>
+	</p>
+
+	{
+		testimonialsPublished && (
+			<script
+				type="application/ld+json"
+				set:html={JSON.stringify(reviewSchema)}
+			/>
+		)
+	}
+</Section>

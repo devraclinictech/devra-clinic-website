@@ -1,0 +1,29 @@
+---
+import Layout from "../layouts/Layout.astro";
+import TopBar from "../components/sections/TopBar.astro";
+import Header from "../components/sections/Header.astro";
+import PageHeader from "../components/sections/PageHeader.astro";
+import PhysioPackages from "../components/sections/PhysioPackages.astro";
+import CtaBand from "../components/sections/CtaBand.astro";
+import Footer from "../components/sections/Footer.astro";
+import BookingModal from "../components/sections/BookingModal.astro";
+---
+
+<Layout
+	title="Physiotherapy Packages & Pricing in Ranchi | Devra Clinic"
+	description="Physiotherapy consultation packages at Devra Clinic, Ranchi: single session ₹500, Smart Relief (3 sessions ₹1300), Extended Care (6 sessions ₹2500) and Rehabilitation Care (10 sessions ₹4000). Class 3B laser therapy available."
+>
+	<TopBar />
+	<Header />
+	<main>
+		<PageHeader
+			crumb="Physio Packages"
+			title="Physiotherapy Packages"
+			subtitle="Advanced physiotherapy with Class 3B laser therapy, in single sessions or value packages."
+		/>
+		<PhysioPackages />
+		<CtaBand />
+	</main>
+	<Footer />
+	<BookingModal />
+</Layout>

@@ -1,0 +1,29 @@
+---
+import Layout from "../layouts/Layout.astro";
+import TopBar from "../components/sections/TopBar.astro";
+import Header from "../components/sections/Header.astro";
+import PageHeader from "../components/sections/PageHeader.astro";
+import RateChart from "../components/sections/RateChart.astro";
+import CtaBand from "../components/sections/CtaBand.astro";
+import Footer from "../components/sections/Footer.astro";
+import BookingModal from "../components/sections/BookingModal.astro";
+---
+
+<Layout
+	title="Diagnostics & Lab Test Rates in Ranchi | Devra Clinic"
+	description="Transparent diagnostics rate chart at Devra Clinic, Ranchi: CBC, CRP, HbA1c, Vitamin D3, Lipid Profile, dengue, typhoid and more, from an in-house pathology lab with quick, dependable reports."
+>
+	<TopBar />
+	<Header />
+	<main>
+		<PageHeader
+			crumb="Diagnostics"
+			title="Diagnostics & Pathology"
+			subtitle="Accurate blood tests and health screenings from our in-house lab, with clear, up-front pricing."
+		/>
+		<RateChart />
+		<CtaBand />
+	</main>
+	<Footer />
+	<BookingModal />
+</Layout>

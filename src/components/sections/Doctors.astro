@@ -1,0 +1,60 @@
+---
+/**
+ * Doctors - meet-the-team grid. Builds trust by showing the specialists behind
+ * the care, with real timings and services. Cards come from `doctors` data.
+ */
+import Section from "../ui/Section.astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+import DoctorCard from "./DoctorCard.astro";
+import MoreLink from "../ui/MoreLink.astro";
+import { doctors, clinic, seo } from "../../data/site.ts";
+
+interface Props {
+	detailsHref?: string;
+	/** Emit Physician JSON-LD. Use on the dedicated /doctors page only. */
+	emitSchema?: boolean;
+}
+
+const { detailsHref, emitSchema = false } = Astro.props;
+
+const physicianSchema = doctors.map((d) => ({
+	"@context": "https://schema.org",
+	"@type": "Physician",
+	name: d.name,
+	medicalSpecialty: d.role,
+	worksFor: { "@id": `${seo.siteUrl}/#clinic`, name: clinic.name },
+	availableService: d.specialties.map((s) => ({
+		"@type": "MedicalProcedure",
+		name: s,
+	})),
+}));
+---
+
+{
+	emitSchema && (
+		<script
+			type="application/ld+json"
+			set:html={JSON.stringify(physicianSchema)}
+		/>
+	)
+}
+
+<Section id="doctors" tone="surface">
+	<SectionHeading
+		eyebrow="Our medical specialists"
+		title="Meet the doctors at Devra Clinic"
+		subtitle="Your care in Ranchi is led by qualified, approachable specialists across medicine, physiotherapy and paediatrics."
+	/>
+
+	<div class="mt-12 grid gap-6 lg:grid-cols-3">
+		{doctors.map((doctor, i) => <DoctorCard doctor={doctor} index={i} />)}
+	</div>
+
+	{
+		detailsHref && (
+			<div class="mt-10 text-center">
+				<MoreLink href={detailsHref} label="Meet all our doctors" />
+			</div>
+		)
+	}
+</Section>

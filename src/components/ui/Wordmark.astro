@@ -1,0 +1,34 @@
+---
+/**
+ * Wordmark - the brand lockup: the shield-cross Logo mark + "DEVRA" and a
+ * muted suffix. `tone="light"` renders the text on dark backgrounds (footer).
+ */
+import Logo from "./Logo.astro";
+
+interface Props {
+	tone?: "default" | "light";
+	class?: string;
+}
+
+const { tone = "default", class: className = "" } = Astro.props;
+
+const suffixColor = tone === "light" ? "text-white/70" : "text-ink-muted";
+const primaryColor = tone === "light" ? "text-white" : "text-brand";
+---
+
+<a
+	href="/"
+	class={`group inline-flex items-center gap-2.5 ${className}`}
+	aria-label="Devra Clinic & Diagnostics, home"
+	data-no-i18n
+>
+	<Logo
+		class="h-9 w-9 transition-transform duration-200 group-hover:scale-105"
+	/>
+	<span class="text-lg font-extrabold leading-none tracking-tight">
+		<span class={primaryColor}>DEVRA</span>
+		<span class={`block text-xs font-semibold ${suffixColor}`}>
+			Clinic &amp; Diagnostics
+		</span>
+	</span>
+</a>

@@ -1,0 +1,112 @@
+---
+/**
+ * Hero - two-column intro. Left: location-rich headline, supporting copy,
+ * CTAs and trust chips. Right: a "visit us" info card with quick facts that
+ * make the clinic feel real and local (hours, address, credentials).
+ */
+import Button from "../ui/Button.astro";
+import Icon from "../ui/Icon.astro";
+import { clinic, hours, trustChips } from "../../data/site.ts";
+---
+
+<section id="top" class="relative overflow-hidden bg-surface">
+	<!-- subtle brand accent -->
+	<div
+		class="animate-float pointer-events-none absolute -right-32 -top-32 h-[28rem] w-[28rem] rounded-full bg-brand-tint blur-3xl"
+		aria-hidden="true"
+	>
+	</div>
+
+	<div
+		class="relative mx-auto grid w-full max-w-content gap-12 px-5 pb-16 pt-14 sm:px-8 sm:pb-20 sm:pt-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center"
+	>
+		<!-- left: message -->
+		<div data-reveal>
+			<p
+				class="inline-flex items-center gap-2 rounded-pill bg-brand-tint px-4 py-1.5 text-sm font-semibold text-brand-dark"
+			>
+				<Icon name="clinic" class="h-4 w-4" />
+				Your neighbourhood clinic in Ranchi
+			</p>
+
+			<h1
+				class="mt-6 text-5xl font-semibold leading-[1.08] text-ink sm:text-6xl"
+			>
+				{clinic.tagline}
+			</h1>
+
+			<p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-muted sm:text-xl">
+				{clinic.subheading}
+			</p>
+
+			<div class="mt-8 flex flex-wrap items-center gap-4">
+				<Button
+					href={clinic.whatsappHref}
+					size="lg"
+					data-booking-trigger="true"
+				>
+					Book Appointment
+					<Icon name="arrow-right" class="h-4 w-4" />
+				</Button>
+				<Button href={clinic.phoneHref} variant="outline" size="lg">
+					<Icon name="phone" class="h-4 w-4" />
+					Call Now
+				</Button>
+			</div>
+
+			<ul
+				class="mt-8 flex flex-wrap gap-x-5 gap-y-2.5 text-sm font-medium text-ink-muted"
+			>
+				{
+					trustChips.map((chip) => (
+						<li class="inline-flex items-center gap-2">
+							<Icon name="check" class="h-4 w-4 text-brand" />
+							{chip}
+						</li>
+					))
+				}
+			</ul>
+		</div>
+
+		<!-- right: visit info card -->
+		<div
+			data-reveal
+			style="--reveal-delay:140ms"
+			class="rounded-card border border-line bg-surface p-6 shadow-card sm:p-7"
+		>
+			<h2 class="text-lg font-bold text-ink">Visit Devra Clinic</h2>
+			<ul class="mt-5 space-y-4 text-sm">
+				<li class="flex gap-3">
+					<Icon name="clock" class="h-5 w-5 shrink-0 text-brand" />
+					<span class="text-ink-muted">
+						<span class="font-semibold text-ink">Open 7 days</span><br />
+						Mon to Sat: {hours[0].display}<br />
+						Sunday: {hours[1].display}
+					</span>
+				</li>
+				<li class="flex gap-3">
+					<Icon name="pin" class="h-5 w-5 shrink-0 text-brand" />
+					<span class="min-w-0 text-ink-muted">
+						{clinic.address.line1},<br />
+						{clinic.address.line2}, Ranchi 834012
+					</span>
+				</li>
+				<li class="flex gap-3">
+					<Icon name="laser" class="h-5 w-5 shrink-0 text-brand" />
+					<span class="text-ink-muted">Class 3B laser physiotherapy</span>
+				</li>
+				<li class="flex gap-3">
+					<Icon name="lab" class="h-5 w-5 shrink-0 text-brand" />
+					<span class="text-ink-muted">In-house pathology lab</span>
+				</li>
+			</ul>
+			<a
+				href={clinic.mapsHref}
+				class="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:text-brand-dark"
+			>
+				Get directions
+				<Icon name="arrow-right" class="h-4 w-4" />
+			</a>
+		</div>
+	</div>
+</section>

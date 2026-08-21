@@ -1,0 +1,140 @@
+---
+/**
+ * ContactInfo - visit details: hours, location and ways to reach the clinic,
+ * with a clear "book / call" prompt. All values come from site data so the
+ * details can be updated in one place.
+ */
+import Section from "../ui/Section.astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+import Button from "../ui/Button.astro";
+import Icon from "../ui/Icon.astro";
+import WhatsAppIcon from "../ui/WhatsAppIcon.astro";
+import MoreLink from "../ui/MoreLink.astro";
+import { clinic, hours } from "../../data/site.ts";
+
+interface Props {
+	detailsHref?: string;
+}
+
+const { detailsHref } = Astro.props;
+---
+
+<Section id="contact" tone="alt">
+	<SectionHeading
+		eyebrow="Visit us"
+		title="Visit Devra Clinic in Ranchi"
+		subtitle="Walk in or book ahead. We're here for you through the week."
+	/>
+
+	<div data-reveal class="mt-12 grid gap-6 lg:grid-cols-3">
+		<!-- Hours -->
+		<div class="rounded-card border border-line bg-surface p-6 shadow-card">
+			<span
+				class="flex h-11 w-11 items-center justify-center rounded-card bg-brand-tint text-brand"
+			>
+				<Icon name="clock" class="h-6 w-6" />
+			</span>
+			<h3 class="mt-5 text-lg font-bold text-ink">Opening hours</h3>
+			<dl class="mt-4 space-y-3">
+				{
+					hours.map((slot) => (
+						<div class="flex items-baseline justify-between gap-4 border-b border-line pb-3 last:border-0 last:pb-0">
+							<dt class="text-sm font-medium text-ink">{slot.label}</dt>
+							<dd class="text-sm text-ink-muted">{slot.display}</dd>
+						</div>
+					))
+				}
+			</dl>
+		</div>
+
+		<!-- Location -->
+		<div class="rounded-card border border-line bg-surface p-6 shadow-card">
+			<span
+				class="flex h-11 w-11 items-center justify-center rounded-card bg-brand-tint text-brand"
+			>
+				<Icon name="pin" class="h-6 w-6" />
+			</span>
+			<h3 class="mt-5 text-lg font-bold text-ink">Our location</h3>
+			<address class="mt-4 not-italic text-sm leading-relaxed text-ink-muted">
+				{clinic.address.line1},<br />
+				{clinic.address.line2},<br />
+				{clinic.address.locality}, {clinic.address.region}
+				{clinic.address.postalCode}
+			</address>
+			<div class="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+				<a
+					href={clinic.mapsHref}
+					class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:text-brand-dark"
+				>
+					Get directions
+					<Icon name="arrow-right" class="h-4 w-4" />
+				</a>
+				<a
+					href={clinic.gmbHref}
+					target="_blank"
+					rel="noopener"
+					class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:text-brand-dark"
+				>
+					<Icon name="star" class="h-4 w-4" />
+					Reviews on Google
+				</a>
+			</div>
+		</div>
+
+		<!-- Reach us -->
+		<div class="flex flex-col rounded-card bg-brand p-6 text-white shadow-card">
+			<span
+				class="flex h-11 w-11 items-center justify-center rounded-card bg-white/15"
+			>
+				<Icon name="phone" class="h-6 w-6" />
+			</span>
+			<h3 class="mt-5 text-lg font-bold">Reach us directly</h3>
+			<ul class="mt-4 space-y-3 text-sm">
+				<li>
+					<a
+						href={clinic.phoneHref}
+						class="inline-flex items-center gap-2 hover:underline"
+					>
+						<Icon name="phone" class="h-4 w-4" />
+						{clinic.phoneDisplay}
+					</a>
+				</li>
+				<li>
+					<a
+						href={clinic.whatsappHref}
+						class="inline-flex items-center gap-2 hover:underline"
+					>
+						<WhatsAppIcon class="h-4 w-4" />
+						{clinic.whatsappDisplay}
+					</a>
+				</li>
+				<li>
+					<a
+						href={`mailto:${clinic.email}`}
+						class="flex min-w-0 items-center gap-2 hover:underline"
+					>
+						<Icon name="mail" class="h-4 w-4 shrink-0" />
+						<span class="break-all">{clinic.email}</span>
+					</a>
+				</li>
+			</ul>
+			<div class="mt-auto pt-6">
+				<Button
+					href={clinic.whatsappHref}
+					variant="light"
+					data-booking-trigger="true"
+				>
+					Book on WhatsApp
+				</Button>
+			</div>
+		</div>
+	</div>
+
+	{
+		detailsHref && (
+			<div class="mt-10 text-center">
+				<MoreLink href={detailsHref} label="See full visit details" />
+			</div>
+		)
+	}
+</Section>

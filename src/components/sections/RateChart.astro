@@ -1,0 +1,105 @@
+---
+/**
+ * RateChart - transparent diagnostics rate chart plus an "other services"
+ * mini price list. Great for local SEO ("blood test price in Ranchi") and
+ * builds trust through up-front pricing. All values come from site data.
+ */
+import Section from "../ui/Section.astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+import Icon from "../ui/Icon.astro";
+import WhatsAppIcon from "../ui/WhatsAppIcon.astro";
+import MoreLink from "../ui/MoreLink.astro";
+import { diagnosticTests, otherServices, clinic } from "../../data/site.ts";
+
+interface Props {
+	detailsHref?: string;
+}
+
+const { detailsHref } = Astro.props;
+
+// Split the test list into two balanced columns on larger screens.
+const mid = Math.ceil(diagnosticTests.length / 2);
+const columns = [diagnosticTests.slice(0, mid), diagnosticTests.slice(mid)];
+---
+
+<Section id="rates" tone="surface">
+	<SectionHeading
+		eyebrow="Diagnostics & pathology"
+		title="Transparent diagnostics rate chart"
+		subtitle="Accurate blood tests and health screenings from our in-house lab, with clear, up-front pricing. No hidden charges."
+	/>
+
+	<div data-reveal class="mt-12 grid gap-6 lg:grid-cols-3">
+		<!-- Test rate chart -->
+		<div
+			class="rounded-card border border-line bg-surface p-6 shadow-card lg:col-span-2"
+		>
+			<h3 class="text-lg font-bold text-ink">Lab test rate chart</h3>
+			<div class="mt-5 grid gap-x-10 gap-y-0 sm:grid-cols-2">
+				{
+					columns.map((col) => (
+						<dl class="divide-y divide-line">
+							{col.map((test) => (
+								<div class="flex items-baseline justify-between gap-4 py-2.5">
+									<dt class="text-sm text-ink">{test.name}</dt>
+									<dd class="text-sm font-semibold text-ink">
+										{test.price}
+									</dd>
+								</div>
+							))}
+						</dl>
+					))
+				}
+			</div>
+			<p
+				class="mt-5 flex items-start gap-2 rounded-card bg-surface-alt p-3 text-xs leading-relaxed text-ink-muted"
+			>
+				<Icon name="lab" class="mt-0.5 h-4 w-4 shrink-0 text-brand" />
+				Tests are processed in our in-house lab, avoiding the temperature changes
+				and long transit times that can affect the accuracy of results.
+			</p>
+		</div>
+
+		<!-- Other services -->
+		<div class="flex flex-col gap-6">
+			<div class="rounded-card border border-line bg-surface p-6 shadow-card">
+				<h3 class="text-lg font-bold text-ink">Other services</h3>
+				<dl class="mt-4 divide-y divide-line">
+					{
+						otherServices.map((item) => (
+							<div class="flex items-baseline justify-between gap-4 py-2.5">
+								<dt class="text-sm text-ink">{item.name}</dt>
+								<dd class="text-sm font-semibold text-ink">{item.price}</dd>
+							</div>
+						))
+					}
+				</dl>
+			</div>
+
+			<div class="rounded-card bg-brand p-6 text-white shadow-card">
+				<h3 class="text-lg font-bold">Need a specific test?</h3>
+				<p class="mt-2 text-sm text-white/90">
+					Ask us about tests not listed here, home sample collection or package
+					pricing. We're happy to help.
+				</p>
+				<a
+					href={clinic.whatsappHref}
+					data-booking-trigger="true"
+					data-service="Diagnostics & Pathology"
+					class="mt-5 inline-flex items-center justify-center gap-2 rounded-pill bg-white px-5 py-2.5 text-sm font-semibold text-brand-dark transition-colors hover:bg-white/90"
+				>
+					<WhatsAppIcon class="h-4 w-4" />
+					Enquire on WhatsApp
+				</a>
+			</div>
+		</div>
+	</div>
+
+	{
+		detailsHref && (
+			<div class="mt-10 text-center">
+				<MoreLink href={detailsHref} label="View full diagnostics page" />
+			</div>
+		)
+	}
+</Section>

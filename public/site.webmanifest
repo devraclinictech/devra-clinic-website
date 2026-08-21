@@ -1,0 +1,16 @@
+{
+	"name": "Devra Clinic & Diagnostics",
+	"short_name": "Devra Clinic",
+	"description": "Clinic, physiotherapy and diagnostics in Ranchi. Serving 13,000+ patients since 2019.",
+	"start_url": "/",
+	"scope": "/",
+	"display": "standalone",
+	"background_color": "#fbfcfb",
+	"theme_color": "#0d9488",
+	"lang": "en-IN",
+	"icons": [
+		{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+		{ "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+		{ "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+	]
+}

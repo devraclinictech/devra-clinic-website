@@ -1,0 +1,187 @@
+@import "tailwindcss";
+
+/*
+ * Devra Clinic - Design System
+ * Clean & clinical: generous whitespace, crisp reddish accents, modern sans-serif.
+ * All design tokens live here as Tailwind v4 theme variables so the whole site
+ * can be re-themed from one place. Use them via utilities like `bg-brand`,
+ * `text-ink-muted`, `rounded-card`, `shadow-card`, `max-w-content`, etc.
+ */
+@theme {
+	/* Brand - medical teal (clean, calm, clinical) */
+	--color-brand: #0d9488;
+	--color-brand-dark: #0f766e;
+	--color-brand-darker: #115e59;
+	--color-brand-tint: #edf7f5;
+	--color-brand-tint-strong: #d5efe9;
+
+	/* Ink / neutrals - soft charcoal with a faint teal undertone, so text is
+	 * easy on the eyes rather than a stark near-black on pure white. */
+	--color-ink: #1f2a2a;
+	--color-ink-muted: #57666a;
+	--color-ink-subtle: #8a9a9d;
+	--color-surface: #fbfcfb; /* off-white, cuts glare vs pure #fff */
+	--color-surface-alt: #f1f6f4; /* calm teal-tinted mist for alt sections */
+	--color-line: #e3eae8;
+
+	/* Typography */
+	--font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+		Roboto, Helvetica, Arial, sans-serif;
+	/* Display sans for large headings - friendly, rounded geometric. */
+	--font-display: "Poppins", ui-sans-serif, system-ui, -apple-system,
+		"Segoe UI", Roboto, sans-serif;
+
+	/* Radius scale - a touch softer */
+	--radius-card: 1.15rem;
+	--radius-pill: 9999px;
+
+	/* Shadows - lighter and more diffuse */
+	--shadow-card: 0 1px 2px rgba(16, 40, 38, 0.03),
+		0 6px 20px rgba(16, 40, 38, 0.05);
+	--shadow-card-hover: 0 2px 6px rgba(16, 40, 38, 0.05),
+		0 18px 44px rgba(13, 148, 136, 0.12);
+
+	/* Layout */
+	--spacing-content: 72rem; /* max content width via max-w-content */
+}
+
+@layer base {
+	html {
+		scroll-behavior: smooth;
+		-webkit-text-size-adjust: 100%;
+	}
+
+	body {
+		font-family: var(--font-sans);
+		color: var(--color-ink);
+		background-color: var(--color-surface);
+		line-height: 1.6;
+		-webkit-font-smoothing: antialiased;
+		text-rendering: optimizeLegibility;
+	}
+
+	/* Display sans on the big headings; slightly tighter for geometric type. */
+	h1,
+	h2 {
+		font-family: var(--font-display);
+		letter-spacing: -0.02em;
+	}
+
+	/* Visible, on-brand focus ring for keyboard users */
+	:focus-visible {
+		outline: 2px solid var(--color-brand);
+		outline-offset: 2px;
+		border-radius: 4px;
+	}
+}
+
+/* Language switch buttons + Hindi (Devanagari) typography. */
+.lang-btn {
+	color: var(--color-ink-muted);
+	transition:
+		background-color 0.15s ease,
+		color 0.15s ease;
+}
+.lang-btn[aria-pressed="true"] {
+	background-color: var(--color-brand);
+	color: #fff;
+}
+
+/* When Hindi is active, switch to a Devanagari-capable family site-wide. */
+html[data-lang="hi"] {
+	--font-sans: "Noto Sans Devanagari", "Inter", ui-sans-serif, system-ui,
+		sans-serif;
+	--font-display: "Noto Sans Devanagari", "Poppins", ui-sans-serif, sans-serif;
+}
+
+/*
+ * Motion - subtle "living" touches. All entrance animation is gated behind
+ * `.has-js` (added by an inline script) so content is never hidden if the
+ * script fails, and behind `prefers-reduced-motion: no-preference` so it is
+ * fully skipped for users who ask for reduced motion.
+ */
+@media (prefers-reduced-motion: no-preference) {
+	.has-js [data-reveal] {
+		opacity: 0;
+		transform: translateY(1.25rem);
+		transition:
+			opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+			transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+		transition-delay: var(--reveal-delay, 0ms);
+		will-change: opacity, transform;
+	}
+
+	.has-js [data-reveal].is-visible {
+		opacity: 1;
+		transform: none;
+	}
+
+	/* Slow drifting hero accent glow. */
+	@keyframes devra-float {
+		0%,
+		100% {
+			transform: translate3d(0, 0, 0) scale(1);
+		}
+		50% {
+			transform: translate3d(-1.5rem, 1.25rem, 0) scale(1.06);
+		}
+	}
+
+	.animate-float {
+		animation: devra-float 12s ease-in-out infinite;
+	}
+}
+
+/* Mobile menu: slide + fade. Kept out of the DOM flow when closed and
+ * non-focusable via visibility, so it degrades cleanly. */
+#mobile-nav {
+	max-height: 0;
+	overflow: hidden;
+	opacity: 0;
+	visibility: hidden;
+	transition:
+		max-height 0.32s ease,
+		opacity 0.32s ease,
+		visibility 0s linear 0.32s;
+}
+
+#mobile-nav.is-open {
+	max-height: 34rem;
+	opacity: 1;
+	visibility: visible;
+	transition:
+		max-height 0.32s ease,
+		opacity 0.32s ease,
+		visibility 0s linear 0s;
+}
+
+/* Booking dialog: fade + rise on open, and a soft blurred backdrop. */
+#booking-dialog {
+	opacity: 0;
+	transform: translateY(12px) scale(0.98);
+}
+
+#booking-dialog.is-open {
+	opacity: 1;
+	transform: none;
+}
+
+#booking-dialog::backdrop {
+	background: rgba(16, 40, 38, 0.5);
+	opacity: 0;
+}
+
+#booking-dialog.is-open::backdrop {
+	opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	#booking-dialog {
+		transition:
+			opacity 0.25s ease,
+			transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	#booking-dialog::backdrop {
+		transition: opacity 0.25s ease;
+	}
+}

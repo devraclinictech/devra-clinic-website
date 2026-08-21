@@ -1,0 +1,31 @@
+---
+/**
+ * ServiceCard - one service tile: icon badge, name, description.
+ * Presentational; receives a single Service from the site data.
+ */
+import Icon from "../ui/Icon.astro";
+import type { Service } from "../../data/site.ts";
+
+interface Props {
+	service: Service;
+	index?: number;
+}
+
+const { service, index = 0 } = Astro.props;
+---
+
+<article
+	data-reveal
+	style={`--reveal-delay:${index * 70}ms`}
+	class="group flex flex-col rounded-card border border-line bg-surface p-6 shadow-card transition duration-200 hover:-translate-y-1 hover:shadow-card-hover"
+>
+	<span
+		class="flex h-12 w-12 items-center justify-center rounded-card bg-brand-tint text-brand transition-colors duration-200 group-hover:bg-brand group-hover:text-white"
+	>
+		<Icon name={service.icon} class="h-6 w-6" />
+	</span>
+	<h3 class="mt-5 text-lg font-bold text-ink">{service.name}</h3>
+	<p class="mt-2 text-sm leading-relaxed text-ink-muted">
+		{service.description}
+	</p>
+</article>

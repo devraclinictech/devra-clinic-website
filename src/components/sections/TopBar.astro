@@ -1,0 +1,30 @@
+---
+/**
+ * TopBar - thin utility strip above the header: location, open days and a
+ * click-to-call number. Reinforces "real local clinic" trust at first glance.
+ */
+import Icon from "../ui/Icon.astro";
+import { clinic } from "../../data/site.ts";
+---
+
+<div class="bg-brand-darker text-white">
+	<div
+		class="mx-auto flex h-9 w-full max-w-content items-center justify-between gap-4 px-5 text-xs sm:px-8"
+	>
+		<span class="inline-flex min-w-0 items-center gap-1.5">
+			<Icon name="pin" class="h-3.5 w-3.5 shrink-0" />
+			<span class="truncate">Ranchi, Jharkhand</span>
+		</span>
+		<span class="hidden items-center gap-1.5 whitespace-nowrap sm:inline-flex">
+			<Icon name="clock" class="h-3.5 w-3.5" />
+			Open 7 days a week
+		</span>
+		<a
+			href={clinic.phoneHref}
+			class="inline-flex shrink-0 items-center gap-1.5 font-semibold whitespace-nowrap transition-colors hover:text-white/80"
+		>
+			<Icon name="phone" class="h-3.5 w-3.5" />
+			{clinic.phoneDisplay}
+		</a>
+	</div>
+</div>
