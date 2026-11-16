@@ -290,9 +290,15 @@ const field =
 				}),
 			);
 
-		// Deep link: /?book (optionally &service=Name) opens the form on load.
+		// Deep link: /?appointment (optionally &service=Name) opens the form on
+		// load. /?book and the #appointment/#book hashes also work.
 		const bookParams = new URLSearchParams(location.search);
-		if (bookParams.has("book") || location.hash === "#book") {
+		const wantsForm =
+			bookParams.has("appointment") ||
+			bookParams.has("book") ||
+			location.hash === "#appointment" ||
+			location.hash === "#book";
+		if (wantsForm) {
 			openDialog(null);
 			const svc = bookParams.get("service");
 			if (svc && [...serviceSel.options].some((o) => o.value === svc)) {
