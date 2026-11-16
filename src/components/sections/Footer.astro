@@ -72,6 +72,21 @@ const doctorProfiles = doctors.filter((d) => d.profileHref);
 								<span>Google Business Profile</span>
 							</a>
 						</li>
+						{
+							clinic.socials.map((s) => (
+								<li>
+									<a
+										href={s.href}
+										target="_blank"
+										rel="noopener"
+										class="flex min-w-0 items-center gap-2 transition-colors hover:text-white"
+									>
+										<Icon name={s.icon} class="h-4 w-4 shrink-0" />
+										<span>{s.label}</span>
+									</a>
+								</li>
+							))
+						}
 					</ul>
 				</div>
 				{

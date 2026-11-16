@@ -46,8 +46,19 @@ export const clinic = {
 	gmbHref: "https://share.google/SxnwrnPh3tk2O9hhB",
 	// Direct "write a review" link (opens the Google review dialog).
 	reviewHref: "https://g.page/r/CeUwtSv9ukpjEBM/review",
-	// Social profiles (added to schema sameAs). Paste Instagram/Facebook URLs.
-	socialLinks: [] as string[],
+	// Social profiles (shown in the footer and added to schema sameAs).
+	socials: [
+		{
+			label: "Instagram",
+			href: "https://www.instagram.com/devraclinicranchi/",
+			icon: "instagram",
+		},
+		{
+			label: "Facebook",
+			href: "https://www.facebook.com/p/DEVRA-Clinic-Diagnostics-61578279812684/",
+			icon: "facebook",
+		},
+	],
 	// Coordinates from the Google Maps listing (used in local-business schema).
 	geo: { latitude: 23.3890685, longitude: 85.3755347 },
 } as const;

@@ -49,7 +49,7 @@ const clinicSchema = {
 	foundingDate: clinic.establishedYear,
 	priceRange: "₹₹",
 	currenciesAccepted: "INR",
-	sameAs: [clinic.gmbHref, ...clinic.socialLinks],
+	sameAs: [clinic.gmbHref, ...clinic.socials.map((s) => s.href)],
 	address: {
 		"@type": "PostalAddress",
 		streetAddress: fullStreet,
