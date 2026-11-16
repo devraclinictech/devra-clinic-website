@@ -40,8 +40,9 @@ export const clinic = {
 		postalCode: "834012",
 		country: "IN",
 	},
+	// "Get directions" - opens turn-by-turn directions to the clinic pin.
 	mapsHref:
-		"https://www.google.com/maps/search/?api=1&query=Devra+Clinic+Pitamber+Estate+Khelgaon+More+Deepatoli+Jai+Prakash+Nagar+Ranchi+Jharkhand+834012",
+		"https://www.google.com/maps/dir/?api=1&destination=23.3890071,85.3755477",
 	// Google Business Profile (for viewing the listing / existing reviews).
 	gmbHref: "https://share.google/SxnwrnPh3tk2O9hhB",
 	// Direct "write a review" link (opens the Google review dialog).
@@ -60,7 +61,7 @@ export const clinic = {
 		},
 	],
 	// Coordinates from the Google Maps listing (used in local-business schema).
-	geo: { latitude: 23.3890685, longitude: 85.3755347 },
+	geo: { latitude: 23.3890071, longitude: 85.3755477 },
 } as const;
 
 /** Headline credibility stats from the clinic's own record. */
