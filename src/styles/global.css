@@ -160,22 +160,6 @@ html[data-lang="hi"] {
 }
 
 /* Booking dialog: fade + rise on open, and a soft blurred backdrop. */
-/* Custom placeholder for empty date/time inputs (kept as native inputs so the
- * picker opens on a single tap). Overlay only where ::-webkit-datetime-edit is
- * supported, so Firefox keeps its own placeholder and nothing overlaps. */
-.dt-ph {
-	display: none;
-}
-
-@supports selector(::-webkit-datetime-edit) {
-	.dt-field:not(.has-value)::-webkit-datetime-edit {
-		color: transparent;
-	}
-	.dt-field:not(.has-value) + .dt-ph {
-		display: flex;
-	}
-}
-
 #booking-dialog {
 	opacity: 0;
 	transform: translateY(12px);

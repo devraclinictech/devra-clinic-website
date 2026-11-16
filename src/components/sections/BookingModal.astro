@@ -126,41 +126,25 @@ const field =
 				<label for="bk-date" class="text-sm font-semibold text-ink">
 					Preferred date
 				</label>
-				<div class="relative">
-					<input
-						id="bk-date"
-						name="date"
-						type="date"
-						onclick="try{this.showPicker()}catch(e){}"
-						oninput="this.classList.toggle('has-value', !!this.value)"
-						class={`${field} dt-field`}
-					/>
-					<span
-						class="dt-ph pointer-events-none absolute inset-y-0 left-4 flex items-center text-sm text-ink-subtle"
-					>
-						Select a date
-					</span>
-				</div>
+				<input
+					id="bk-date"
+					name="date"
+					type="date"
+					onclick="try{this.showPicker()}catch(e){}"
+					class={field}
+				/>
 			</div>
 			<div class="grid gap-1.5">
 				<label for="bk-time" class="text-sm font-semibold text-ink">
 					Preferred time
 				</label>
-				<div class="relative">
-					<input
-						id="bk-time"
-						name="time"
-						type="time"
-						onclick="try{this.showPicker()}catch(e){}"
-						oninput="this.classList.toggle('has-value', !!this.value)"
-						class={`${field} dt-field`}
-					/>
-					<span
-						class="dt-ph pointer-events-none absolute inset-y-0 left-4 flex items-center text-sm text-ink-subtle"
-					>
-						Select a time
-					</span>
-				</div>
+				<input
+					id="bk-time"
+					name="time"
+					type="time"
+					onclick="try{this.showPicker()}catch(e){}"
+					class={field}
+				/>
 			</div>
 		</div>
 
@@ -270,11 +254,8 @@ const field =
 				? preset
 				: "";
 
-			// Keep past dates out, and sync the placeholder overlay state.
+			// Keep past dates out of the picker.
 			dateInput.min = new Date().toISOString().slice(0, 10);
-			const timeInput = form.elements.namedItem("time") as HTMLInputElement;
-			dateInput.classList.toggle("has-value", !!dateInput.value);
-			timeInput.classList.toggle("has-value", !!timeInput.value);
 
 			dialog.showModal();
 			document.body.style.overflow = "hidden";
