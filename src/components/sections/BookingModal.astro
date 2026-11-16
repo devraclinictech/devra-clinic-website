@@ -14,8 +14,9 @@ import Icon from "../ui/Icon.astro";
 import WhatsAppIcon from "../ui/WhatsAppIcon.astro";
 import { clinic, services } from "../../data/site.ts";
 
+// text-base (16px) on mobile stops iOS Safari from auto-zooming on focus.
 const field =
-	"w-full rounded-card border border-line bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-subtle transition focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25";
+	"w-full rounded-card border border-line bg-surface px-4 py-2.5 text-base sm:text-sm text-ink placeholder:text-ink-subtle transition focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25";
 ---
 
 <dialog
