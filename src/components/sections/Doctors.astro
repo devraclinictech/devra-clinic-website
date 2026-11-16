@@ -23,6 +23,7 @@ const physicianSchema = doctors.map((d) => ({
 	name: d.name,
 	medicalSpecialty: d.role,
 	worksFor: { "@id": `${seo.siteUrl}/#clinic`, name: clinic.name },
+	...(d.profileHref ? { sameAs: [d.profileHref] } : {}),
 	availableService: d.specialties.map((s) => ({
 		"@type": "MedicalProcedure",
 		name: s,

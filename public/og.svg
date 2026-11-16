@@ -2,20 +2,15 @@
 	<rect width="1200" height="630" fill="#fbfcfb"/>
 	<rect width="1200" height="12" fill="#0d9488"/>
 
-	<g transform="translate(80,64) scale(1.25)">
-		<path d="M32 6 L54 15 V33 C54 45 44 53 32 58 C20 53 10 45 10 33 V15 Z" fill="#0d9488"/>
-		<rect x="28.5" y="22" width="7" height="20" rx="2.5" fill="#ffffff"/>
-		<rect x="22" y="28.5" width="20" height="7" rx="2.5" fill="#ffffff"/>
-	</g>
-	<text x="188" y="98" font-size="40" font-weight="bold" letter-spacing="2" fill="#0d9488">DEVRA</text>
-	<text x="190" y="132" font-size="22" fill="#57666a">Clinic &amp; Diagnostics</text>
+	<text x="80" y="104" font-size="58" font-weight="bold" letter-spacing="2" fill="#d81f26">DEVRA</text>
+	<text x="82" y="140" font-size="22" font-weight="bold" letter-spacing="7" fill="#1f2a2a">CLINIC &amp; DIAGNOSTICS</text>
 
-	<text x="80" y="248" font-size="60" font-weight="bold" fill="#1f2a2a">Trusted clinic &amp; diagnostic</text>
-	<text x="80" y="322" font-size="60" font-weight="bold" fill="#1f2a2a">centre in Ranchi</text>
+	<text x="80" y="256" font-size="60" font-weight="bold" fill="#1f2a2a">Trusted clinic &amp; diagnostic</text>
+	<text x="80" y="330" font-size="60" font-weight="bold" fill="#1f2a2a">centre in Ranchi</text>
 
-	<text x="80" y="392" font-size="27" fill="#57666a">Consultations · Physiotherapy · Diagnostics · Pharmacy · Vaccination</text>
+	<text x="80" y="400" font-size="27" fill="#57666a">Consultations · Physiotherapy · Diagnostics · Pharmacy · Vaccination</text>
 
-	<text x="80" y="462" font-size="25" font-weight="bold" fill="#0f766e">Serving Ranchi since 2019 · 13,000+ patients · Class 3B laser therapy</text>
+	<text x="80" y="470" font-size="25" font-weight="bold" fill="#0f766e">Serving Ranchi since 2019 · 13,000+ patients · Class 3B laser therapy</text>
 
 	<rect x="0" y="530" width="1200" height="100" fill="#0d9488"/>
 	<text x="80" y="592" font-size="27" fill="#ffffff">Ranchi, Jharkhand · Open 7 days</text>

@@ -21,11 +21,23 @@ const { doctor, index = 0 } = Astro.props;
 	class="flex flex-col rounded-card border border-line bg-surface p-6 shadow-card transition duration-200 hover:-translate-y-1 hover:shadow-card-hover"
 >
 	<div class="flex items-start gap-4">
-		<span
-			class="flex h-14 w-14 shrink-0 items-center justify-center rounded-pill bg-brand-tint text-brand"
-		>
-			<Icon name={doctor.icon} class="h-7 w-7" />
-		</span>
+		{
+			doctor.photo ? (
+				<img
+					src={doctor.photo}
+					alt={`${doctor.name}, ${doctor.role}`}
+					width="64"
+					height="64"
+					loading="lazy"
+					decoding="async"
+					class="h-16 w-16 shrink-0 rounded-pill object-cover"
+				/>
+			) : (
+				<span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-pill bg-brand-tint text-brand">
+					<Icon name={doctor.icon} class="h-7 w-7" />
+				</span>
+			)
+		}
 		<div class="min-w-0">
 			<h3 class="text-lg font-bold text-ink">{doctor.name}</h3>
 			<p class="mt-0.5 text-sm font-semibold text-brand">{doctor.role}</p>
@@ -67,4 +79,20 @@ const { doctor, index = 0 } = Astro.props;
 			}
 		</ul>
 	</div>
+
+	{
+		doctor.profileHref && (
+			<div class="mt-auto border-t border-line pt-4">
+				<a
+					href={doctor.profileHref}
+					target="_blank"
+					rel="noopener"
+					class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand transition-colors hover:text-brand-dark"
+				>
+					<Icon name="star" class="h-4 w-4" />
+					View on Google
+				</a>
+			</div>
+		)
+	}
 </article>

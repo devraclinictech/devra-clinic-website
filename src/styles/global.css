@@ -8,6 +8,10 @@
  * `text-ink-muted`, `rounded-card`, `shadow-card`, `max-w-content`, etc.
  */
 @theme {
+	/* Logo brand red (matches the official DEVRA wordmark). Kept separate from
+	 * the site accent so the logo stays on-brand regardless of the theme. */
+	--color-logo: #d81f26;
+
 	/* Brand - medical teal (clean, calm, clinical) */
 	--color-brand: #0d9488;
 	--color-brand-dark: #0f766e;
@@ -156,9 +160,25 @@ html[data-lang="hi"] {
 }
 
 /* Booking dialog: fade + rise on open, and a soft blurred backdrop. */
+/* Custom placeholder for empty date/time inputs (kept as native inputs so the
+ * picker opens on a single tap). Overlay only where ::-webkit-datetime-edit is
+ * supported, so Firefox keeps its own placeholder and nothing overlaps. */
+.dt-ph {
+	display: none;
+}
+
+@supports selector(::-webkit-datetime-edit) {
+	.dt-field:not(.has-value)::-webkit-datetime-edit {
+		color: transparent;
+	}
+	.dt-field:not(.has-value) + .dt-ph {
+		display: flex;
+	}
+}
+
 #booking-dialog {
 	opacity: 0;
-	transform: translateY(12px) scale(0.98);
+	transform: translateY(12px);
 }
 
 #booking-dialog.is-open {

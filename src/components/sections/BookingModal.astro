@@ -21,35 +21,50 @@ const field =
 <dialog
 	id="booking-dialog"
 	data-whatsapp={clinic.whatsappNumber}
-	class="m-auto w-[calc(100%-1.5rem)] max-w-lg max-h-[92dvh] overflow-y-auto rounded-card border border-line bg-surface p-0 shadow-card"
+	class="m-auto max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-lg overflow-y-auto rounded-card border border-line bg-surface p-0 shadow-card max-sm:m-0 max-sm:h-dvh max-sm:max-h-dvh max-sm:w-full max-sm:max-w-none max-sm:flex max-sm:flex-col max-sm:overflow-hidden max-sm:rounded-none max-sm:border-0"
 	aria-labelledby="booking-title"
 >
 	<!-- header -->
-	<div class="flex items-start gap-4 border-b border-line bg-brand-tint px-6 py-5">
+	<div
+		class="flex items-center gap-3 border-b border-line bg-brand-tint px-4 py-3 max-sm:shrink-0 sm:items-start sm:gap-4 sm:px-6 sm:py-5"
+	>
+		<button
+			id="bk-back"
+			type="button"
+			class="-ml-1 inline-flex items-center gap-1.5 rounded-pill px-2 py-1.5 text-sm font-semibold text-ink transition-colors hover:bg-surface sm:hidden"
+			aria-label="Back"
+		>
+			<Icon name="arrow-right" class="h-5 w-5 rotate-180" />
+			Back
+		</button>
 		<span
-			class="flex h-11 w-11 shrink-0 items-center justify-center rounded-card bg-brand text-white shadow-card"
+			class="hidden h-11 w-11 shrink-0 items-center justify-center rounded-card bg-brand text-white shadow-card sm:flex"
 		>
 			<WhatsAppIcon class="h-6 w-6" />
 		</span>
 		<div class="min-w-0">
-			<h2 id="booking-title" class="text-xl font-bold text-ink">
+			<h2 id="booking-title" class="text-lg font-bold text-ink sm:text-xl">
 				Book an appointment
 			</h2>
-			<p class="mt-1 text-sm text-ink-muted">
+			<p class="mt-1 hidden text-sm text-ink-muted sm:block">
 				Share a few details and we'll confirm your slot on WhatsApp.
 			</p>
 		</div>
 		<button
 			id="bk-close"
 			type="button"
-			class="-mr-1 -mt-1 ml-auto flex h-9 w-9 shrink-0 items-center justify-center rounded-pill text-ink-muted transition-colors hover:bg-surface hover:text-ink"
+			class="-mr-1 -mt-1 ml-auto hidden h-9 w-9 shrink-0 items-center justify-center rounded-pill text-ink-muted transition-colors hover:bg-surface hover:text-ink sm:flex"
 			aria-label="Close"
 		>
 			<Icon name="close" class="h-5 w-5" />
 		</button>
 	</div>
 
-	<form id="booking-form" class="grid gap-4 px-6 py-6" novalidate>
+	<form
+		id="booking-form"
+		class="grid gap-4 px-6 py-6 max-sm:min-h-0 max-sm:flex-1 max-sm:content-start max-sm:overflow-y-auto"
+		novalidate
+	>
 		<div class="grid gap-4 sm:grid-cols-2">
 			<div class="grid gap-1.5">
 				<label for="bk-name" class="text-sm font-semibold text-ink">
@@ -111,13 +126,41 @@ const field =
 				<label for="bk-date" class="text-sm font-semibold text-ink">
 					Preferred date
 				</label>
-				<input id="bk-date" name="date" type="date" class={field} />
+				<div class="relative">
+					<input
+						id="bk-date"
+						name="date"
+						type="date"
+						onclick="try{this.showPicker()}catch(e){}"
+						oninput="this.classList.toggle('has-value', !!this.value)"
+						class={`${field} dt-field`}
+					/>
+					<span
+						class="dt-ph pointer-events-none absolute inset-y-0 left-4 flex items-center text-sm text-ink-subtle"
+					>
+						Select a date
+					</span>
+				</div>
 			</div>
 			<div class="grid gap-1.5">
 				<label for="bk-time" class="text-sm font-semibold text-ink">
 					Preferred time
 				</label>
-				<input id="bk-time" name="time" type="time" class={field} />
+				<div class="relative">
+					<input
+						id="bk-time"
+						name="time"
+						type="time"
+						onclick="try{this.showPicker()}catch(e){}"
+						oninput="this.classList.toggle('has-value', !!this.value)"
+						class={`${field} dt-field`}
+					/>
+					<span
+						class="dt-ph pointer-events-none absolute inset-y-0 left-4 flex items-center text-sm text-ink-subtle"
+					>
+						Select a time
+					</span>
+				</div>
 			</div>
 		</div>
 
@@ -144,7 +187,7 @@ const field =
 
 	<!-- reassurance footer -->
 	<div
-		class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-line bg-surface-alt px-6 py-4 text-xs text-ink-muted"
+		class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-line bg-surface-alt px-6 py-4 text-xs text-ink-muted max-sm:shrink-0"
 	>
 		<span class="inline-flex items-center gap-1.5">
 			<Icon name="shield" class="h-4 w-4 text-brand" />
@@ -227,8 +270,11 @@ const field =
 				? preset
 				: "";
 
-			// Prevent picking a past date.
+			// Keep past dates out, and sync the placeholder overlay state.
 			dateInput.min = new Date().toISOString().slice(0, 10);
+			const timeInput = form.elements.namedItem("time") as HTMLInputElement;
+			dateInput.classList.toggle("has-value", !!dateInput.value);
+			timeInput.classList.toggle("has-value", !!timeInput.value);
 
 			dialog.showModal();
 			document.body.style.overflow = "hidden";
@@ -253,6 +299,7 @@ const field =
 			.forEach((el) => el.addEventListener("click", openDialog));
 
 		document.getElementById("bk-close")?.addEventListener("click", closeDialog);
+		document.getElementById("bk-back")?.addEventListener("click", closeDialog);
 		dialog.addEventListener("click", (event) => {
 			if (event.target === dialog) closeDialog();
 		});
@@ -308,6 +355,67 @@ const field =
 			message += line("Preferred date", String(data.get("date") ?? ""));
 			message += line("Preferred time", String(data.get("time") ?? ""));
 			message += line("Notes", String(data.get("notes") ?? ""));
+
+			// Notify the clinic on Slack so they can follow up if the patient
+			// never sends the WhatsApp message. Fire-and-forget, never blocks.
+			const SLACK = import.meta.env.PUBLIC_SLACK_WEBHOOK_URL;
+			if (SLACK) {
+				const service = String(data.get("service") ?? "").trim();
+				const date = String(data.get("date") ?? "").trim();
+				const time = String(data.get("time") ?? "").trim();
+				const notes = String(data.get("notes") ?? "").trim();
+
+				// Make the phone a tap-to-WhatsApp link for quick follow-up.
+				const digits = phone.replace(/\D/g, "");
+				const wa =
+					digits.length === 10 ? `91${digits}` : digits.length ? digits : "";
+				const phoneMd = wa ? `<https://wa.me/${wa}|${phone}>` : phone;
+
+				const fields = [`*Name:*\n${name}`, `*Phone:*\n${phoneMd}`];
+				if (service) fields.push(`*Service:*\n${service}`);
+				const when = [date, time].filter(Boolean).join(" at ");
+				if (when) fields.push(`*Preferred:*\n${when}`);
+
+				const blocks: Record<string, unknown>[] = [
+					{
+						type: "header",
+						text: { type: "plain_text", text: "🔔 New booking lead", emoji: true },
+					},
+					{
+						type: "section",
+						fields: fields.map((t) => ({ type: "mrkdwn", text: t })),
+					},
+				];
+				if (notes) {
+					blocks.push({
+						type: "section",
+						text: { type: "mrkdwn", text: `*Notes:*\n${notes}` },
+					});
+				}
+				blocks.push({
+					type: "context",
+					elements: [
+						{
+							type: "mrkdwn",
+							text: `Tapped *Continue on WhatsApp* · ${location.pathname}`,
+						},
+					],
+				});
+
+				const body = JSON.stringify({
+					text: `New booking lead: ${name} (${phone})`,
+					blocks,
+				});
+				try {
+					// text/plain avoids a CORS preflight Slack won't answer.
+					const blob = new Blob([body], { type: "text/plain;charset=UTF-8" });
+					if (!navigator.sendBeacon(SLACK, blob)) {
+						fetch(SLACK, { method: "POST", mode: "no-cors", body, keepalive: true });
+					}
+				} catch (e) {
+					/* never block the booking on a failed ping */
+				}
+			}
 
 			const url = `https://wa.me/${number}?text=${encodeURIComponent(message.trim())}`;
 			window.open(url, "_blank", "noopener");

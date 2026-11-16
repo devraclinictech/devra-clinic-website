@@ -4,9 +4,10 @@
  */
 import Wordmark from "../ui/Wordmark.astro";
 import Icon from "../ui/Icon.astro";
-import { clinic, nav } from "../../data/site.ts";
+import { clinic, nav, doctors } from "../../data/site.ts";
 
 const year = new Date().getFullYear();
+const doctorProfiles = doctors.filter((d) => d.profileHref);
 ---
 
 <footer class="bg-ink text-white/70">
@@ -21,7 +22,7 @@ const year = new Date().getFullYear();
 				</p>
 			</div>
 
-			<div class="grid grid-cols-2 gap-10 sm:gap-16">
+			<div class="grid grid-cols-2 gap-10 sm:grid-cols-3 sm:gap-12">
 				<div class="min-w-0">
 					<h4 class="text-sm font-semibold text-white">Explore</h4>
 					<ul class="mt-4 space-y-2.5 text-sm">
@@ -73,6 +74,30 @@ const year = new Date().getFullYear();
 						</li>
 					</ul>
 				</div>
+				{
+					doctorProfiles.length > 0 && (
+						<div class="min-w-0">
+							<h4 class="text-sm font-semibold text-white">
+								Our doctors on Google
+							</h4>
+							<ul class="mt-4 space-y-2.5 text-sm">
+								{doctorProfiles.map((d) => (
+									<li>
+										<a
+											href={d.profileHref}
+											target="_blank"
+											rel="noopener"
+											class="flex min-w-0 items-start gap-2 transition-colors hover:text-white"
+										>
+											<Icon name="star" class="mt-0.5 h-4 w-4 shrink-0" />
+											<span>{d.name}</span>
+										</a>
+									</li>
+								))}
+							</ul>
+						</div>
+					)
+				}
 			</div>
 		</div>
 

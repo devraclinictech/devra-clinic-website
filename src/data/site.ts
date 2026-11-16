@@ -46,6 +46,8 @@ export const clinic = {
 	gmbHref: "https://share.google/SxnwrnPh3tk2O9hhB",
 	// Direct "write a review" link (opens the Google review dialog).
 	reviewHref: "https://g.page/r/CeUwtSv9ukpjEBM/review",
+	// Social profiles (added to schema sameAs). Paste Instagram/Facebook URLs.
+	socialLinks: [] as string[],
 	// Coordinates from the Google Maps listing (used in local-business schema).
 	geo: { latitude: 23.3890685, longitude: 85.3755347 },
 } as const;
@@ -144,6 +146,10 @@ export type Doctor = {
 	fee?: string;
 	specialties: string[];
 	icon: "stethoscope" | "physio" | "vaccine";
+	/** The doctor's own Google Business Profile / Maps listing. */
+	profileHref?: string;
+	/** Portrait photo path in /public (optional; falls back to an icon). */
+	photo?: string;
 };
 
 /**
@@ -154,12 +160,15 @@ export const doctors: Doctor[] = [
 	{
 		name: "Dr. Rajesh Kumar Singh",
 		role: "Physician · Diabetologist · Critical Care Specialist",
-		qualification: "MBBS, MD (Medicine)",
+		qualification:
+			"MBBS, MD (Medicine), FNB (Critical Care), IDCC (Infectious Diseases), CCECM (Diabetes)",
 		timings: [
 			"Mon to Sat: 8:30 AM to 10:00 AM & 6:00 PM to 8:00 PM",
 			"Sunday: 9:00 AM to 11:00 AM",
 		],
-		fee: "₹800 consultation (valid for 10 days)",
+		fee: "₹900 consultation (valid for 10 days)",
+		profileHref: "https://share.google/IdwkUQkNH4uw36gnl",
+		photo: "/images/dr-rajesh.jpg",
 		specialties: [
 			"General Medicine",
 			"Diabetes Management",
@@ -177,6 +186,8 @@ export const doctors: Doctor[] = [
 			"BPT, CMT (Musculoskeletal), Fellowship in Orthopaedic Rehabilitation, MHA",
 		timings: ["Mon to Sat: 10:00 AM to 7:00 PM"],
 		fee: "₹500 per session (package facility available)",
+		profileHref: "https://maps.app.goo.gl/41MSxRNfxT33pXiGA",
+		photo: "/images/dr-rahul.jpg",
 		specialties: [
 			"Advanced Physiotherapy",
 			"Orthopaedic Rehabilitation",
@@ -418,6 +429,45 @@ export const testimonials: Testimonial[] = [
 
 /** Turn on ONLY when the testimonials above are real, consented reviews. */
 export const testimonialsPublished = false;
+
+export type GalleryImage = { src: string; alt: string; caption: string };
+
+/**
+ * Clinic photos. Drop the matching files into /public/images (see the README
+ * there). Alt text is written for accessibility and local SEO.
+ */
+export const gallery: GalleryImage[] = [
+	{
+		src: "/images/reception.jpg",
+		alt: "Reception and waiting area at Devra Clinic & Diagnostics, Ranchi",
+		caption: "Reception & waiting area",
+	},
+	{
+		src: "/images/physiotherapy.jpg",
+		alt: "Physiotherapy and rehabilitation room with exercise equipment",
+		caption: "Physiotherapy & rehab",
+	},
+	{
+		src: "/images/laser-therapy.jpg",
+		alt: "Class 3B laser therapy machine used for pain management",
+		caption: "Class 3B laser therapy",
+	},
+	{
+		src: "/images/lab.jpg",
+		alt: "In-house pathology and diagnostics laboratory with analysers",
+		caption: "In-house pathology lab",
+	},
+	{
+		src: "/images/treatment-room.jpg",
+		alt: "Physiotherapy treatment room with traction table at Devra Clinic",
+		caption: "Treatment room",
+	},
+	{
+		src: "/images/storefront.jpg",
+		alt: "Devra Clinic & Diagnostics storefront and signboard in Ranchi",
+		caption: "Our clinic entrance",
+	},
+];
 
 export const nav = [
 	{ label: "Services", hash: "/#services", page: "/services", header: true },

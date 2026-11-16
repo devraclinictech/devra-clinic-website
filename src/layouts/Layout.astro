@@ -1,6 +1,14 @@
 ---
 import "../styles/global.css";
-import { clinic, hours, faqs, seo, physioPackages } from "../data/site.ts";
+import {
+	clinic,
+	hours,
+	faqs,
+	seo,
+	physioPackages,
+	diagnosticTests,
+	otherServices,
+} from "../data/site.ts";
 
 interface Props {
 	title?: string;
@@ -41,7 +49,7 @@ const clinicSchema = {
 	foundingDate: clinic.establishedYear,
 	priceRange: "₹₹",
 	currenciesAccepted: "INR",
-	sameAs: [clinic.gmbHref],
+	sameAs: [clinic.gmbHref, ...clinic.socialLinks],
 	address: {
 		"@type": "PostalAddress",
 		streetAddress: fullStreet,
@@ -50,7 +58,14 @@ const clinicSchema = {
 		postalCode: clinic.address.postalCode,
 		addressCountry: clinic.address.country,
 	},
-	areaServed: { "@type": "City", name: "Ranchi" },
+	areaServed: [
+		"Ranchi",
+		"Deepatoli",
+		"Jai Prakash Nagar",
+		"Khelgaon More",
+		"Kanke",
+		"Morabadi",
+	],
 	geo: {
 		"@type": "GeoCoordinates",
 		latitude: clinic.geo.latitude,
@@ -72,18 +87,27 @@ const clinicSchema = {
 		closes: h.closes,
 	})),
 	makesOffer: [
+		{ "@type": "Offer", name: "Physician consultation", price: 900, priceCurrency: "INR" },
+		{ "@type": "Offer", name: "Pediatric consultation", price: 500, priceCurrency: "INR" },
 		...physioPackages.map((p) => ({
 			"@type": "Offer",
 			name: `Physiotherapy: ${p.name}`,
 			price: priceNum(p.price),
 			priceCurrency: "INR",
 		})),
-		{
+		...diagnosticTests.map((t) => ({
 			"@type": "Offer",
-			name: "Physician consultation",
-			price: 800,
+			category: "Diagnostics",
 			priceCurrency: "INR",
-		},
+			price: priceNum(t.price),
+			itemOffered: { "@type": "MedicalTest", name: t.name },
+		})),
+		...otherServices.map((s) => ({
+			"@type": "Offer",
+			priceCurrency: "INR",
+			price: priceNum(s.price),
+			itemOffered: { "@type": "MedicalProcedure", name: s.name },
+		})),
 	],
 };
 

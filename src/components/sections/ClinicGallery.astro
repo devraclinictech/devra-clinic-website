@@ -1,0 +1,43 @@
+---
+/**
+ * ClinicGallery - a grid of real clinic photos. Images come from the `gallery`
+ * data and live in /public/images. Each has descriptive alt text for
+ * accessibility and local SEO.
+ */
+import Section from "../ui/Section.astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+import { gallery } from "../../data/site.ts";
+---
+
+<Section id="gallery" tone="surface">
+	<SectionHeading
+		eyebrow="Take a look inside"
+		title="Inside Devra Clinic"
+		subtitle="A clean, well-equipped clinic in Ranchi, from reception and consultation to physiotherapy and our in-house lab."
+	/>
+
+	<div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+		{
+			gallery.map((img, i) => (
+				<figure
+					data-reveal
+					style={`--reveal-delay:${(i % 3) * 80}ms`}
+					class="group overflow-hidden rounded-card border border-line bg-surface-alt shadow-card"
+				>
+					<div class="aspect-[4/3] overflow-hidden">
+						<img
+							src={img.src}
+							alt={img.alt}
+							loading="lazy"
+							decoding="async"
+							class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+						/>
+					</div>
+					<figcaption class="px-4 py-3 text-sm font-medium text-ink">
+						{img.caption}
+					</figcaption>
+				</figure>
+			))
+		}
+	</div>
+</Section>
