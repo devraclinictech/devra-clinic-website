@@ -250,13 +250,12 @@ const field =
 			clearError(phoneInput, phoneError),
 		);
 
-		const openDialog = (event: Event) => {
-			event.preventDefault();
-			lastTrigger = event.currentTarget as HTMLElement;
+		const openDialog = (trigger: HTMLElement | null) => {
+			lastTrigger = trigger;
 			clearError(nameInput, nameError);
 			clearError(phoneInput, phoneError);
 
-			const preset = lastTrigger?.dataset.service ?? "";
+			const preset = trigger?.dataset.service ?? "";
 			serviceSel.value = [...serviceSel.options].some((o) => o.value === preset)
 				? preset
 				: "";
@@ -284,7 +283,22 @@ const field =
 
 		document
 			.querySelectorAll<HTMLElement>("[data-booking-trigger]")
-			.forEach((el) => el.addEventListener("click", openDialog));
+			.forEach((el) =>
+				el.addEventListener("click", (e) => {
+					e.preventDefault();
+					openDialog(el);
+				}),
+			);
+
+		// Deep link: /?book (optionally &service=Name) opens the form on load.
+		const bookParams = new URLSearchParams(location.search);
+		if (bookParams.has("book") || location.hash === "#book") {
+			openDialog(null);
+			const svc = bookParams.get("service");
+			if (svc && [...serviceSel.options].some((o) => o.value === svc)) {
+				serviceSel.value = svc;
+			}
+		}
 
 		document.getElementById("bk-close")?.addEventListener("click", closeDialog);
 		document.getElementById("bk-back")?.addEventListener("click", closeDialog);
