@@ -133,6 +133,7 @@ const field =
 					name="date"
 					type="date"
 					onclick="try{this.showPicker()}catch(e){}"
+					onchange="document.getElementById('bk-notes').scrollIntoView({behavior:'smooth',block:'end'})"
 					class={field}
 				/>
 			</div>
@@ -145,6 +146,7 @@ const field =
 					name="time"
 					type="time"
 					onclick="try{this.showPicker()}catch(e){}"
+					onchange="document.getElementById('bk-notes').scrollIntoView({behavior:'smooth',block:'end'})"
 					class={field}
 				/>
 			</div>
