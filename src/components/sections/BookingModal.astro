@@ -216,6 +216,70 @@ const field =
 		const phoneError = document.getElementById("bk-phone-error");
 
 		let lastTrigger: HTMLElement | null = null;
+		let submitted = false;
+		let abandonedSent = false;
+		const SLACK = import.meta.env.PUBLIC_SLACK_WEBHOOK_URL;
+
+		const postSlack = (text: string, blocks: Record<string, unknown>[]) => {
+			if (!SLACK) return;
+			const body = JSON.stringify({ text, blocks });
+			try {
+				// text/plain avoids a CORS preflight Slack won't answer.
+				const blob = new Blob([body], { type: "text/plain;charset=UTF-8" });
+				if (!navigator.sendBeacon(SLACK, blob)) {
+					fetch(SLACK, { method: "POST", mode: "no-cors", body, keepalive: true });
+				}
+			} catch (e) {
+				/* never block the booking on a failed ping */
+			}
+		};
+
+		// A tap-to-WhatsApp link for the phone number.
+		const waLink = (phone: string) => {
+			const d = phone.replace(/\D/g, "");
+			const wa = d.length === 10 ? `91${d}` : d.length ? d : "";
+			return wa ? `<https://wa.me/${wa}|${phone}>` : phone;
+		};
+
+		// Patient entered a usable phone but left without tapping Continue:
+		// send a call-back request so the clinic can reach out.
+		const sendAbandoned = () => {
+			if (submitted || abandonedSent) return;
+			const phone = phoneInput.value.trim();
+			if (phone.replace(/\D/g, "").length < 10) return;
+			abandonedSent = true;
+			const name = nameInput.value.trim();
+			const service = serviceSel.value.trim();
+			const fields = [`*Phone:*\n${waLink(phone)}`];
+			if (name) fields.unshift(`*Name:*\n${name}`);
+			if (service) fields.push(`*Service:*\n${service}`);
+			postSlack(`Call-back request: ${name || "no name"} (${phone})`, [
+				{
+					type: "header",
+					text: { type: "plain_text", text: "📞 Call-back request", emoji: true },
+				},
+				{
+					type: "section",
+					text: {
+						type: "mrkdwn",
+						text: "Patient started a booking and left *without finishing*. Please call them back.",
+					},
+				},
+				{
+					type: "section",
+					fields: fields.map((x) => ({ type: "mrkdwn", text: x })),
+				},
+				{
+					type: "context",
+					elements: [
+						{
+							type: "mrkdwn",
+							text: `Did not tap Continue on WhatsApp · ${location.pathname}`,
+						},
+					],
+				},
+			]);
+		};
 
 		// Pick a message in the currently active language.
 		const t = (en: string, hiStr: string) =>
@@ -270,6 +334,7 @@ const field =
 		};
 
 		const closeDialog = () => {
+			sendAbandoned();
 			dialog.classList.remove("is-open");
 			document.body.style.overflow = "";
 			window.setTimeout(
@@ -316,6 +381,15 @@ const field =
 			closeDialog();
 		});
 
+		// Leaving the tab/page with the form open and a phone filled: still ping.
+		const onLeave = () => {
+			if (dialog.open) sendAbandoned();
+		};
+		document.addEventListener("visibilitychange", () => {
+			if (document.visibilityState === "hidden") onLeave();
+		});
+		window.addEventListener("pagehide", onLeave);
+
 		const line = (label: string, value: string) =>
 			value.trim() ? `${label}: ${value.trim()}\n` : "";
 
@@ -355,6 +429,7 @@ const field =
 				return;
 			}
 
+			submitted = true;
 			const data = new FormData(form);
 			let message = "Hello Devra Clinic, I'd like to book an appointment.\n\n";
 			message += line("Name", name);
@@ -364,66 +439,44 @@ const field =
 			message += line("Preferred time", String(data.get("time") ?? ""));
 			message += line("Notes", String(data.get("notes") ?? ""));
 
-			// Notify the clinic on Slack so they can follow up if the patient
+			// Notify the clinic on Slack so they can follow up even if the patient
 			// never sends the WhatsApp message. Fire-and-forget, never blocks.
-			const SLACK = import.meta.env.PUBLIC_SLACK_WEBHOOK_URL;
-			if (SLACK) {
-				const service = String(data.get("service") ?? "").trim();
-				const date = String(data.get("date") ?? "").trim();
-				const time = String(data.get("time") ?? "").trim();
-				const notes = String(data.get("notes") ?? "").trim();
+			const service = String(data.get("service") ?? "").trim();
+			const date = String(data.get("date") ?? "").trim();
+			const time = String(data.get("time") ?? "").trim();
+			const notes = String(data.get("notes") ?? "").trim();
 
-				// Make the phone a tap-to-WhatsApp link for quick follow-up.
-				const digits = phone.replace(/\D/g, "");
-				const wa =
-					digits.length === 10 ? `91${digits}` : digits.length ? digits : "";
-				const phoneMd = wa ? `<https://wa.me/${wa}|${phone}>` : phone;
+			const fields = [`*Name:*\n${name}`, `*Phone:*\n${waLink(phone)}`];
+			if (service) fields.push(`*Service:*\n${service}`);
+			const when = [date, time].filter(Boolean).join(" at ");
+			if (when) fields.push(`*Preferred:*\n${when}`);
 
-				const fields = [`*Name:*\n${name}`, `*Phone:*\n${phoneMd}`];
-				if (service) fields.push(`*Service:*\n${service}`);
-				const when = [date, time].filter(Boolean).join(" at ");
-				if (when) fields.push(`*Preferred:*\n${when}`);
-
-				const blocks: Record<string, unknown>[] = [
-					{
-						type: "header",
-						text: { type: "plain_text", text: "🔔 New booking lead", emoji: true },
-					},
-					{
-						type: "section",
-						fields: fields.map((t) => ({ type: "mrkdwn", text: t })),
-					},
-				];
-				if (notes) {
-					blocks.push({
-						type: "section",
-						text: { type: "mrkdwn", text: `*Notes:*\n${notes}` },
-					});
-				}
+			const blocks: Record<string, unknown>[] = [
+				{
+					type: "header",
+					text: { type: "plain_text", text: "🔔 New booking lead", emoji: true },
+				},
+				{
+					type: "section",
+					fields: fields.map((x) => ({ type: "mrkdwn", text: x })),
+				},
+			];
+			if (notes) {
 				blocks.push({
-					type: "context",
-					elements: [
-						{
-							type: "mrkdwn",
-							text: `Tapped *Continue on WhatsApp* · ${location.pathname}`,
-						},
-					],
+					type: "section",
+					text: { type: "mrkdwn", text: `*Notes:*\n${notes}` },
 				});
-
-				const body = JSON.stringify({
-					text: `New booking lead: ${name} (${phone})`,
-					blocks,
-				});
-				try {
-					// text/plain avoids a CORS preflight Slack won't answer.
-					const blob = new Blob([body], { type: "text/plain;charset=UTF-8" });
-					if (!navigator.sendBeacon(SLACK, blob)) {
-						fetch(SLACK, { method: "POST", mode: "no-cors", body, keepalive: true });
-					}
-				} catch (e) {
-					/* never block the booking on a failed ping */
-				}
 			}
+			blocks.push({
+				type: "context",
+				elements: [
+					{
+						type: "mrkdwn",
+						text: `Tapped *Continue on WhatsApp* · ${location.pathname}`,
+					},
+				],
+			});
+			postSlack(`New booking lead: ${name} (${phone})`, blocks);
 
 			const url = `https://wa.me/${number}?text=${encodeURIComponent(message.trim())}`;
 			window.open(url, "_blank", "noopener");
