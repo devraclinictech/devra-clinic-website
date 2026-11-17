@@ -211,22 +211,6 @@ export const doctors: Doctor[] = [
 		],
 		icon: "physio",
 	},
-	{
-		name: "Dr. Jayant Raj",
-		role: "Consultant Pediatrician & Neonatologist",
-		qualification: "MD (Pediatrics)",
-		timings: ["Daily: 11:00 AM to 4:00 PM"],
-		fee: "₹500 consultation (valid for 10 days)",
-		specialties: [
-			"Newborn (Neonatal) Care",
-			"Child Health Check-ups",
-			"Growth & Development Monitoring",
-			"Childhood Vaccination",
-			"Pediatric Illness Management",
-			"Nutrition & Preventive Child Healthcare",
-		],
-		icon: "vaccine",
-	},
 ];
 
 export type PhysioPackage = {
@@ -512,6 +496,5 @@ export const seo = {
 		"blood test price in Ranchi",
 		"pharmacy in Ranchi",
 		"adult vaccination Ranchi",
-		"pediatrician in Ranchi",
 	],
 } as const;

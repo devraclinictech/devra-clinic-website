@@ -88,7 +88,6 @@ const clinicSchema = {
 	})),
 	makesOffer: [
 		{ "@type": "Offer", name: "Physician consultation", price: 900, priceCurrency: "INR" },
-		{ "@type": "Offer", name: "Pediatric consultation", price: 500, priceCurrency: "INR" },
 		...physioPackages.map((p) => ({
 			"@type": "Offer",
 			name: `Physiotherapy: ${p.name}`,

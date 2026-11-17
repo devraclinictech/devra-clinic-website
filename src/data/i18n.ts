@@ -87,8 +87,8 @@ export const hi: Record<string, string> = {
 	// --- Doctors ---
 	"Our medical specialists": "हमारे चिकित्सा विशेषज्ञ",
 	"Meet the doctors at Devra Clinic": "देवरा क्लिनिक के डॉक्टरों से मिलें",
-	"Your care in Ranchi is led by qualified, approachable specialists across medicine, physiotherapy and paediatrics.":
-		"रांची में आपकी देखभाल योग्य और सहज विशेषज्ञ करते हैं, चिकित्सा, फिजियोथेरेपी और बाल-रोग में।",
+	"Your care in Ranchi is led by qualified, approachable specialists across medicine and physiotherapy.":
+		"रांची में आपकी देखभाल योग्य और सहज विशेषज्ञ करते हैं, चिकित्सा और फिजियोथेरेपी में।",
 	"Specialised services": "विशेष सेवाएँ",
 	"Physician · Diabetologist · Critical Care Specialist":
 		"फिजिशियन · मधुमेह विशेषज्ञ · क्रिटिकल केयर विशेषज्ञ",
@@ -250,8 +250,8 @@ export const hi: Record<string, string> = {
 	"Comprehensive care for your whole family, all under one roof in Ranchi.":
 		"आपके पूरे परिवार के लिए व्यापक देखभाल, रांची में एक ही छत के नीचे।",
 	"Our Medical Specialists": "हमारे चिकित्सा विशेषज्ञ",
-	"Qualified, approachable specialists across medicine, physiotherapy and paediatrics.":
-		"चिकित्सा, फिजियोथेरेपी और बाल-रोग के योग्य और सहज विशेषज्ञ।",
+	"Qualified, approachable specialists across medicine and physiotherapy.":
+		"चिकित्सा और फिजियोथेरेपी के योग्य और सहज विशेषज्ञ।",
 	"Physiotherapy Packages": "फिजियोथेरेपी पैकेज",
 	"Advanced physiotherapy with Class 3B laser therapy, in single sessions or value packages.":
 		"क्लास 3B लेज़र थेरेपी के साथ उन्नत फिजियोथेरेपी, सिंगल सेशन या वैल्यू पैकेज में।",
