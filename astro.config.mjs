@@ -7,7 +7,7 @@ import sitemap from '@astrojs/sitemap';
 // URLs and the generated sitemap).
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://devraclinicranchi.com',
+	site: 'https://www.devraclinic.com',
 	integrations: [
 		sitemap({
 			changefreq: 'weekly',

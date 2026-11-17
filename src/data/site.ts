@@ -477,7 +477,7 @@ export const nav = [
 /** SEO / site-wide config. */
 export const seo = {
 	// Replace with the live domain once registered (used for canonical + OG).
-	siteUrl: "https://devraclinicranchi.com",
+	siteUrl: "https://www.devraclinic.com",
 	// Social share image (1200x630), served from /public.
 	ogImage: "/og.png",
 	title:

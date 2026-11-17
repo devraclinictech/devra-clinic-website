@@ -39,5 +39,5 @@ Allow: /
 User-agent: Meta-ExternalAgent
 Allow: /
 
-Sitemap: https://devraclinicranchi.com/sitemap-index.xml
-LLM: https://devraclinicranchi.com/llms.txt
+Sitemap: https://www.devraclinic.com/sitemap-index.xml
+LLM: https://www.devraclinic.com/llms.txt
