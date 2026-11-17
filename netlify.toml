@@ -4,3 +4,10 @@
 
 [build.environment]
   NODE_VERSION = "22"
+
+# Force the apex domain to the www canonical host.
+[[redirects]]
+  from = "https://devraclinic.com/*"
+  to = "https://www.devraclinic.com/:splat"
+  status = 301
+  force = true
