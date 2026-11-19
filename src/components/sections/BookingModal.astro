@@ -147,10 +147,20 @@ const field =
 					type="time"
 					onclick="try{this.showPicker()}catch(e){}"
 					onchange="var f=document.getElementById('booking-form');f.scrollTo({top:f.scrollHeight,behavior:'smooth'});this.closest('dialog').scrollTo({top:99999,behavior:'smooth'})"
+					aria-describedby="bk-time-hint bk-time-error"
 					class={field}
 				/>
 			</div>
 		</div>
+
+		<p id="bk-time-hint" class="-mt-2 text-xs text-ink-muted" aria-live="polite">
+		</p>
+		<p
+			id="bk-time-error"
+			class="-mt-2 hidden text-xs font-medium text-red-600"
+			aria-live="polite"
+		>
+		</p>
 
 		<div class="grid gap-1.5">
 			<label for="bk-notes" class="text-sm font-semibold text-ink">
@@ -197,6 +207,8 @@ const field =
 </dialog>
 
 <script>
+	import { bookingWindows } from "../../data/site.ts";
+
 	const dialog = document.getElementById(
 		"booking-dialog",
 	) as HTMLDialogElement | null;
@@ -212,8 +224,60 @@ const field =
 		const phoneInput = form.elements.namedItem("phone") as HTMLInputElement;
 		const serviceSel = form.elements.namedItem("service") as HTMLSelectElement;
 		const dateInput = form.elements.namedItem("date") as HTMLInputElement;
+		const timeInput = form.elements.namedItem("time") as HTMLInputElement;
 		const nameError = document.getElementById("bk-name-error");
 		const phoneError = document.getElementById("bk-phone-error");
+		const timeError = document.getElementById("bk-time-error");
+		const timeHint = document.getElementById("bk-time-hint");
+
+		const DAYS = [
+			"Sunday",
+			"Monday",
+			"Tuesday",
+			"Wednesday",
+			"Thursday",
+			"Friday",
+			"Saturday",
+		];
+		const to12 = (hhmm: string) => {
+			const [h, m] = hhmm.split(":").map(Number);
+			const ap = h < 12 ? "AM" : "PM";
+			const h12 = h % 12 || 12;
+			return `${h12}:${String(m).padStart(2, "0")} ${ap}`;
+		};
+		const fmtWindows = (wins: [string, string][]) =>
+			wins.map(([a, b]) => `${to12(a)} to ${to12(b)}`).join(" and ");
+		// Allowed windows for a service on the date's weekday.
+		// null = walk-in (no slot); [] = closed that day; otherwise the windows.
+		const dayWindows = (svc: string, dateStr: string) => {
+			const cfg = bookingWindows[svc];
+			if (!cfg) return null;
+			if (!dateStr) return undefined;
+			const day = new Date(`${dateStr}T00:00`).getDay();
+			return cfg[day] ?? [];
+		};
+
+		// Keep the helper line under the time field in step with service + date.
+		const updateTimeHint = () => {
+			if (!timeHint) return;
+			const svc = serviceSel.value;
+			const cfg = bookingWindows[svc];
+			if (!cfg) {
+				timeHint.textContent = svc
+					? "No fixed slot needed. We'll confirm your preferred time on WhatsApp."
+					: "Pick a service to see available appointment times.";
+				return;
+			}
+			if (!dateInput.value) {
+				timeHint.textContent = `Choose a date to see available times for ${svc}.`;
+				return;
+			}
+			const wins = dayWindows(svc, dateInput.value) as [string, string][];
+			const weekday = DAYS[new Date(`${dateInput.value}T00:00`).getDay()];
+			timeHint.textContent = wins.length
+				? `Available on ${weekday}: ${fmtWindows(wins)}.`
+				: `${svc} is not available on ${weekday}. Please pick another day.`;
+		};
 
 		let lastTrigger: HTMLElement | null = null;
 		let submitted = false;
@@ -309,10 +373,21 @@ const field =
 			if (msgEl) msgEl.classList.add("hidden");
 		};
 
+		const clearTimeError = () => clearError(timeInput, timeError);
+
 		nameInput.addEventListener("input", () => clearError(nameInput, nameError));
 		phoneInput.addEventListener("input", () =>
 			clearError(phoneInput, phoneError),
 		);
+		timeInput.addEventListener("input", clearTimeError);
+		serviceSel.addEventListener("change", () => {
+			clearTimeError();
+			updateTimeHint();
+		});
+		dateInput.addEventListener("change", () => {
+			clearTimeError();
+			updateTimeHint();
+		});
 
 		const openDialog = (trigger: HTMLElement | null) => {
 			lastTrigger = trigger;
@@ -326,6 +401,9 @@ const field =
 
 			// Keep past dates out of the picker.
 			dateInput.min = new Date().toISOString().slice(0, 10);
+
+			clearTimeError();
+			updateTimeHint();
 
 			dialog.showModal();
 			document.body.style.overflow = "hidden";
@@ -368,6 +446,7 @@ const field =
 			const svc = bookParams.get("service");
 			if (svc && [...serviceSel.options].some((o) => o.value === svc)) {
 				serviceSel.value = svc;
+				updateTimeHint();
 			}
 		}
 
@@ -422,6 +501,49 @@ const field =
 					t("Please enter a valid phone number.", "कृपया सही फ़ोन नंबर भरें।"),
 				);
 				firstInvalid = firstInvalid ?? phoneInput;
+			}
+
+			// Consultation services must fall inside their booking window.
+			clearTimeError();
+			const svc = serviceSel.value;
+			if (bookingWindows[svc]) {
+				const date = dateInput.value;
+				const time = timeInput.value;
+				if (!date || !time) {
+					setError(
+						timeInput,
+						timeError,
+						t(
+							`Please choose a date and time for your ${svc}.`,
+							`कृपया अपने ${svc} के लिए तारीख़ और समय चुनें।`,
+						),
+					);
+					firstInvalid = firstInvalid ?? (!date ? dateInput : timeInput);
+				} else {
+					const wins = dayWindows(svc, date) as [string, string][];
+					if (!wins.length) {
+						const weekday = DAYS[new Date(`${date}T00:00`).getDay()];
+						setError(
+							timeInput,
+							timeError,
+							t(
+								`${svc} is not available on ${weekday}. Please pick another day.`,
+								`${weekday} को ${svc} उपलब्ध नहीं है। कृपया दूसरा दिन चुनें।`,
+							),
+						);
+						firstInvalid = firstInvalid ?? dateInput;
+					} else if (!wins.some(([a, b]) => time >= a && time <= b)) {
+						setError(
+							timeInput,
+							timeError,
+							t(
+								`Please choose a time within: ${fmtWindows(wins)}.`,
+								`कृपया इस समय सीमा में चुनें: ${fmtWindows(wins)}।`,
+							),
+						);
+						firstInvalid = firstInvalid ?? timeInput;
+					}
+				}
 			}
 
 			if (firstInvalid) {

@@ -108,7 +108,8 @@ export type Service = {
 		| "pharmacy"
 		| "vaccine"
 		| "nutrition"
-		| "shield";
+		| "shield"
+		| "home";
 };
 
 export const services: Service[] = [
@@ -148,7 +149,34 @@ export const services: Service[] = [
 			"Personalised nutrition and lifestyle guidance to support recovery, diabetes and long-term wellness.",
 		icon: "nutrition",
 	},
+	{
+		name: "Home Service",
+		description:
+			"Physiotherapy and adult vaccination at home. Medicine delivery to your door by courier is also available.",
+		icon: "home",
+	},
 ];
+
+// Appointment windows for services that need a booked slot. Days are
+// 0=Sunday ... 6=Saturday; times are 24h "HH:MM". Any service not listed here
+// is walk-in (or coordinated on WhatsApp) and needs no fixed slot.
+const monToSat = <T>(w: T) => ({ 1: w, 2: w, 3: w, 4: w, 5: w, 6: w });
+
+export const bookingWindows: Record<
+	string,
+	Record<number, [string, string][]>
+> = {
+	"Physician Consultation": {
+		0: [["08:30", "11:00"]],
+		...monToSat<[string, string][]>([
+			["08:30", "09:50"],
+			["17:30", "20:00"],
+		]),
+	},
+	"Advanced Physiotherapy & Rehabilitation": monToSat<[string, string][]>([
+		["10:30", "18:30"],
+	]),
+};
 
 export type Doctor = {
 	name: string;
