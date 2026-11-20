@@ -123,44 +123,45 @@ const field =
 			</select>
 		</div>
 
-		<div class="grid gap-4 sm:grid-cols-2">
-			<div class="grid gap-1.5">
-				<label for="bk-date" class="text-sm font-semibold text-ink">
-					Preferred date
-				</label>
-				<input
-					id="bk-date"
-					name="date"
-					type="date"
-					onclick="try{this.showPicker()}catch(e){}"
-					onchange="var f=document.getElementById('booking-form');f.scrollTo({top:f.scrollHeight,behavior:'smooth'});this.closest('dialog').scrollTo({top:99999,behavior:'smooth'})"
-					class={field}
-				/>
-			</div>
-			<div class="grid gap-1.5">
-				<label for="bk-time" class="text-sm font-semibold text-ink">
-					Preferred time
-				</label>
-				<input
-					id="bk-time"
-					name="time"
-					type="time"
-					onclick="try{this.showPicker()}catch(e){}"
-					onchange="var f=document.getElementById('booking-form');f.scrollTo({top:f.scrollHeight,behavior:'smooth'});this.closest('dialog').scrollTo({top:99999,behavior:'smooth'})"
-					aria-describedby="bk-time-hint bk-time-error"
-					class={field}
-				/>
-			</div>
+		<div class="grid gap-1.5">
+			<label for="bk-date" class="text-sm font-semibold text-ink">
+				Preferred date
+			</label>
+			<input
+				id="bk-date"
+				name="date"
+				type="date"
+				onclick="try{this.showPicker()}catch(e){}"
+				onchange="var f=document.getElementById('booking-form');f.scrollTo({top:f.scrollHeight,behavior:'smooth'});this.closest('dialog').scrollTo({top:99999,behavior:'smooth'})"
+				class={field}
+			/>
 		</div>
 
-		<p id="bk-time-hint" class="-mt-2 text-xs text-ink-muted" aria-live="polite">
-		</p>
-		<p
-			id="bk-time-error"
-			class="-mt-2 hidden text-xs font-medium text-red-600"
-			aria-live="polite"
-		>
-		</p>
+		<div class="grid gap-1.5">
+			<span id="bk-time-label" class="text-sm font-semibold text-ink">
+				Preferred time
+			</span>
+			<!-- Hidden value is set by the slot chips below; keeps FormData.time working. -->
+			<input id="bk-time" name="time" type="hidden" />
+			<!-- display is driven from JS: an inline style beats Tailwind display utils. -->
+			<div
+				id="bk-time-slots"
+				role="group"
+				aria-labelledby="bk-time-label"
+				aria-describedby="bk-time-hint bk-time-error"
+				class="flex-wrap gap-2"
+				style="display:none"
+			>
+			</div>
+			<p id="bk-time-hint" class="text-xs text-ink-muted" aria-live="polite">
+			</p>
+			<p
+				id="bk-time-error"
+				class="hidden text-xs font-medium text-red-600"
+				aria-live="polite"
+			>
+			</p>
+		</div>
 
 		<div class="grid gap-1.5">
 			<label for="bk-notes" class="text-sm font-semibold text-ink">
@@ -229,6 +230,7 @@ const field =
 		const phoneError = document.getElementById("bk-phone-error");
 		const timeError = document.getElementById("bk-time-error");
 		const timeHint = document.getElementById("bk-time-hint");
+		const timeSlots = document.getElementById("bk-time-slots");
 
 		const DAYS = [
 			"Sunday",
@@ -247,6 +249,28 @@ const field =
 		};
 		const fmtWindows = (wins: [string, string][]) =>
 			wins.map(([a, b]) => `${to12(a)} to ${to12(b)}`).join(" and ");
+
+		// Discrete appointment slots offered as chips. 30-min steps, always
+		// including the exact window end (e.g. 9:50) even when it is off-step.
+		const SLOT_STEP = 30;
+		const toMin = (hhmm: string) => {
+			const [h, m] = hhmm.split(":").map(Number);
+			return h * 60 + m;
+		};
+		const toHHMM = (min: number) =>
+			`${String(Math.floor(min / 60)).padStart(2, "0")}:${String(min % 60).padStart(2, "0")}`;
+		const slotsFor = (wins: [string, string][]) => {
+			const out: string[] = [];
+			for (const [a, b] of wins) {
+				for (let t = toMin(a); t <= toMin(b); t += SLOT_STEP) out.push(toHHMM(t));
+				if (out[out.length - 1] !== b) out.push(b);
+			}
+			return out;
+		};
+		const CHIP_IDLE =
+			"rounded-pill border border-line bg-surface px-3 py-1.5 text-sm text-ink transition-colors hover:border-brand hover:text-brand";
+		const CHIP_ON =
+			"rounded-pill border border-brand bg-brand px-3 py-1.5 text-sm font-semibold text-white";
 		// Allowed windows for a service on the date's weekday.
 		// null = walk-in (no slot); [] = closed that day; otherwise the windows.
 		const dayWindows = (svc: string, dateStr: string) => {
@@ -375,19 +399,51 @@ const field =
 
 		const clearTimeError = () => clearError(timeInput, timeError);
 
+		const selectSlot = (btn: HTMLButtonElement, value: string) => {
+			timeInput.value = value;
+			clearTimeError();
+			timeSlots?.querySelectorAll("button").forEach((b) => {
+				b.className = CHIP_IDLE;
+				b.setAttribute("aria-pressed", "false");
+			});
+			btn.className = CHIP_ON;
+			btn.setAttribute("aria-pressed", "true");
+		};
+
+		// Rebuild the slot chips for the current service + date, and keep the
+		// hint line in step. Clears any stale selection.
+		const renderTime = () => {
+			updateTimeHint();
+			if (!timeSlots) return;
+			timeSlots.innerHTML = "";
+			timeInput.value = "";
+			const cfg = bookingWindows[serviceSel.value];
+			const wins =
+				cfg && dateInput.value
+					? (dayWindows(serviceSel.value, dateInput.value) as [string, string][])
+					: [];
+			if (!wins.length) {
+				timeSlots.style.display = "none";
+				return;
+			}
+			timeSlots.style.display = "flex";
+			for (const s of slotsFor(wins)) {
+				const btn = document.createElement("button");
+				btn.type = "button";
+				btn.textContent = to12(s);
+				btn.className = CHIP_IDLE;
+				btn.setAttribute("aria-pressed", "false");
+				btn.addEventListener("click", () => selectSlot(btn, s));
+				timeSlots.appendChild(btn);
+			}
+		};
+
 		nameInput.addEventListener("input", () => clearError(nameInput, nameError));
 		phoneInput.addEventListener("input", () =>
 			clearError(phoneInput, phoneError),
 		);
-		timeInput.addEventListener("input", clearTimeError);
-		serviceSel.addEventListener("change", () => {
-			clearTimeError();
-			updateTimeHint();
-		});
-		dateInput.addEventListener("change", () => {
-			clearTimeError();
-			updateTimeHint();
-		});
+		serviceSel.addEventListener("change", renderTime);
+		dateInput.addEventListener("change", renderTime);
 
 		const openDialog = (trigger: HTMLElement | null) => {
 			lastTrigger = trigger;
@@ -403,7 +459,7 @@ const field =
 			dateInput.min = new Date().toISOString().slice(0, 10);
 
 			clearTimeError();
-			updateTimeHint();
+			renderTime();
 
 			dialog.showModal();
 			document.body.style.overflow = "hidden";
@@ -446,7 +502,7 @@ const field =
 			const svc = bookParams.get("service");
 			if (svc && [...serviceSel.options].some((o) => o.value === svc)) {
 				serviceSel.value = svc;
-				updateTimeHint();
+				renderTime();
 			}
 		}
 
@@ -509,20 +565,20 @@ const field =
 			if (bookingWindows[svc]) {
 				const date = dateInput.value;
 				const time = timeInput.value;
-				if (!date || !time) {
+				if (!date) {
 					setError(
 						timeInput,
 						timeError,
 						t(
-							`Please choose a date and time for your ${svc}.`,
-							`कृपया अपने ${svc} के लिए तारीख़ और समय चुनें।`,
+							`Please choose a date for your ${svc}.`,
+							`कृपया अपने ${svc} के लिए तारीख़ चुनें।`,
 						),
 					);
-					firstInvalid = firstInvalid ?? (!date ? dateInput : timeInput);
+					firstInvalid = firstInvalid ?? dateInput;
 				} else {
 					const wins = dayWindows(svc, date) as [string, string][];
+					const weekday = DAYS[new Date(`${date}T00:00`).getDay()];
 					if (!wins.length) {
-						const weekday = DAYS[new Date(`${date}T00:00`).getDay()];
 						setError(
 							timeInput,
 							timeError,
@@ -532,6 +588,16 @@ const field =
 							),
 						);
 						firstInvalid = firstInvalid ?? dateInput;
+					} else if (!time) {
+						setError(
+							timeInput,
+							timeError,
+							t("Please pick an appointment time.", "कृपया अपॉइंटमेंट का समय चुनें।"),
+						);
+						// Hidden input can't take focus; send it to the first chip.
+						if (!firstInvalid)
+							(timeSlots?.querySelector("button") as HTMLButtonElement)?.focus();
+						firstInvalid = firstInvalid ?? timeInput;
 					} else if (!wins.some(([a, b]) => time >= a && time <= b)) {
 						setError(
 							timeInput,
@@ -558,7 +624,8 @@ const field =
 			message += line("Phone", phone);
 			message += line("Service", String(data.get("service") ?? ""));
 			message += line("Preferred date", String(data.get("date") ?? ""));
-			message += line("Preferred time", String(data.get("time") ?? ""));
+			const timeVal = String(data.get("time") ?? "").trim();
+			message += line("Preferred time", timeVal ? to12(timeVal) : "");
 			message += line("Notes", String(data.get("notes") ?? ""));
 
 			// Notify the clinic on Slack so they can follow up even if the patient
@@ -570,7 +637,7 @@ const field =
 
 			const fields = [`*Name:*\n${name}`, `*Phone:*\n${waLink(phone)}`];
 			if (service) fields.push(`*Service:*\n${service}`);
-			const when = [date, time].filter(Boolean).join(" at ");
+			const when = [date, time && to12(time)].filter(Boolean).join(" at ");
 			if (when) fields.push(`*Preferred:*\n${when}`);
 
 			const blocks: Record<string, unknown>[] = [
