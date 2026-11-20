@@ -149,7 +149,7 @@ const field =
 				role="group"
 				aria-labelledby="bk-time-label"
 				aria-describedby="bk-time-hint bk-time-error"
-				class="flex-wrap gap-2"
+				class="grid grid-cols-4 gap-2"
 				style="display:none"
 			>
 			</div>
@@ -271,9 +271,9 @@ const field =
 			return out;
 		};
 		const CHIP_IDLE =
-			"rounded-pill border border-line bg-surface px-3 py-1.5 text-sm text-ink transition-colors hover:border-brand hover:text-brand";
+			"w-full whitespace-nowrap rounded-pill border border-line bg-surface px-2 py-1.5 text-center text-xs text-ink transition-colors hover:border-brand hover:text-brand sm:text-sm";
 		const CHIP_ON =
-			"rounded-pill border border-brand bg-brand px-3 py-1.5 text-sm font-semibold text-white";
+			"w-full whitespace-nowrap rounded-pill border border-brand bg-brand px-2 py-1.5 text-center text-xs font-semibold text-white sm:text-sm";
 		// Allowed windows for a service on the date's weekday.
 		// null = walk-in (no slot); [] = closed that day; otherwise the windows.
 		const dayWindows = (svc: string, dateStr: string) => {
@@ -437,7 +437,8 @@ const field =
 				timeSlots.style.display = "none";
 				return;
 			}
-			timeSlots.style.display = "flex";
+			// Clear the inline hide so the grid classes take over.
+			timeSlots.style.display = "";
 			for (const s of slotsFor(wins, step)) {
 				const btn = document.createElement("button");
 				btn.type = "button";
