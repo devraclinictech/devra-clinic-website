@@ -292,7 +292,7 @@ const field =
 			if (!cfg) {
 				timeHint.textContent = svc
 					? "Walk-in service, no appointment needed. Pick a preferred time if you like."
-					: "Pick a service to see available appointment times.";
+					: "Pick a preferred time, or choose a service above first.";
 				return;
 			}
 			if (!dateInput.value) {
@@ -428,8 +428,8 @@ const field =
 				wins = dateInput.value
 					? (dayWindows(svc, dateInput.value) as [string, string][])
 					: [];
-			} else if (svc) {
-				// Walk-in service: hourly slots across clinic hours.
+			} else {
+				// Walk-in or no service yet: hourly slots across clinic hours.
 				wins = [CLINIC_HOURS];
 				step = 60;
 			}
