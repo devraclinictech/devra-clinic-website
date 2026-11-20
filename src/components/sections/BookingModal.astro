@@ -253,16 +253,19 @@ const field =
 		// Discrete appointment slots offered as chips. 30-min steps, always
 		// including the exact window end (e.g. 9:50) even when it is off-step.
 		const SLOT_STEP = 30;
+		// Walk-in services have no booking window, so offer hourly slots across
+		// general clinic hours as a convenience "preferred time".
+		const CLINIC_HOURS: [string, string] = ["08:30", "20:00"];
 		const toMin = (hhmm: string) => {
 			const [h, m] = hhmm.split(":").map(Number);
 			return h * 60 + m;
 		};
 		const toHHMM = (min: number) =>
 			`${String(Math.floor(min / 60)).padStart(2, "0")}:${String(min % 60).padStart(2, "0")}`;
-		const slotsFor = (wins: [string, string][]) => {
+		const slotsFor = (wins: [string, string][], step = SLOT_STEP) => {
 			const out: string[] = [];
 			for (const [a, b] of wins) {
-				for (let t = toMin(a); t <= toMin(b); t += SLOT_STEP) out.push(toHHMM(t));
+				for (let t = toMin(a); t <= toMin(b); t += step) out.push(toHHMM(t));
 				if (out[out.length - 1] !== b) out.push(b);
 			}
 			return out;
@@ -288,7 +291,7 @@ const field =
 			const cfg = bookingWindows[svc];
 			if (!cfg) {
 				timeHint.textContent = svc
-					? "No fixed slot needed. We'll confirm your preferred time on WhatsApp."
+					? "Walk-in service, no appointment needed. Pick a preferred time if you like."
 					: "Pick a service to see available appointment times.";
 				return;
 			}
@@ -417,17 +420,25 @@ const field =
 			if (!timeSlots) return;
 			timeSlots.innerHTML = "";
 			timeInput.value = "";
-			const cfg = bookingWindows[serviceSel.value];
-			const wins =
-				cfg && dateInput.value
-					? (dayWindows(serviceSel.value, dateInput.value) as [string, string][])
+			const svc = serviceSel.value;
+			const cfg = bookingWindows[svc];
+			let wins: [string, string][] = [];
+			let step = SLOT_STEP;
+			if (cfg) {
+				wins = dateInput.value
+					? (dayWindows(svc, dateInput.value) as [string, string][])
 					: [];
+			} else if (svc) {
+				// Walk-in service: hourly slots across clinic hours.
+				wins = [CLINIC_HOURS];
+				step = 60;
+			}
 			if (!wins.length) {
 				timeSlots.style.display = "none";
 				return;
 			}
 			timeSlots.style.display = "flex";
-			for (const s of slotsFor(wins)) {
+			for (const s of slotsFor(wins, step)) {
 				const btn = document.createElement("button");
 				btn.type = "button";
 				btn.textContent = to12(s);
