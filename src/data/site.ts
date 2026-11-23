@@ -109,7 +109,8 @@ export type Service = {
 		| "vaccine"
 		| "nutrition"
 		| "shield"
-		| "home";
+		| "home"
+		| "monitor";
 };
 
 export const services: Service[] = [
@@ -154,6 +155,18 @@ export const services: Service[] = [
 		description:
 			"Physiotherapy and adult vaccination at home. Medicine delivery to your door by courier is also available.",
 		icon: "home",
+	},
+	{
+		name: "Online Consultation",
+		description:
+			"Consult our doctors from home over a video call, with your prescription shared on WhatsApp.",
+		icon: "monitor",
+	},
+	{
+		name: "Online Review of Investigations",
+		description:
+			"Share your test reports and get our doctors' expert review and guidance online.",
+		icon: "monitor",
 	},
 ];
 

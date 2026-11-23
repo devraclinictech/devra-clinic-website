@@ -83,6 +83,12 @@ export const hi: Record<string, string> = {
 	"Dietician Consultation": "आहार विशेषज्ञ परामर्श",
 	"Personalised nutrition and lifestyle guidance to support recovery, diabetes and long-term wellness.":
 		"रिकवरी, मधुमेह और दीर्घकालिक सेहत के लिए व्यक्तिगत पोषण और जीवनशैली मार्गदर्शन।",
+	"Online Consultation": "ऑनलाइन परामर्श",
+	"Consult our doctors from home over a video call, with your prescription shared on WhatsApp.":
+		"वीडियो कॉल पर घर बैठे हमारे डॉक्टरों से परामर्श लें, और अपना प्रिस्क्रिप्शन व्हाट्सऐप पर पाएँ।",
+	"Online Review of Investigations": "जाँचों की ऑनलाइन समीक्षा",
+	"Share your test reports and get our doctors' expert review and guidance online.":
+		"अपनी जाँच रिपोर्ट साझा करें और हमारे डॉक्टरों से ऑनलाइन विशेषज्ञ समीक्षा और मार्गदर्शन पाएँ।",
 
 	// --- Doctors ---
 	"Our medical specialists": "हमारे चिकित्सा विशेषज्ञ",
