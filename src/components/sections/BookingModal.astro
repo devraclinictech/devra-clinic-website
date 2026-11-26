@@ -423,11 +423,13 @@ const field =
 			const svc = serviceSel.value;
 			const cfg = bookingWindows[svc];
 			let wins: [string, string][] = [];
-			let step = SLOT_STEP;
+			let step = 60;
 			if (cfg) {
 				wins = dateInput.value
 					? (dayWindows(svc, dateInput.value) as [string, string][])
 					: [];
+				// Physician consultations book in 15-min slots; physiotherapy 30.
+				step = svc === "Physician Consultation" ? 15 : SLOT_STEP;
 			} else {
 				// Walk-in or no service yet: hourly slots across clinic hours.
 				wins = [CLINIC_HOURS];

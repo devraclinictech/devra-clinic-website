@@ -182,7 +182,7 @@ export const bookingWindows: Record<
 	"Physician Consultation": {
 		0: [["08:30", "11:00"]],
 		...monToSat<[string, string][]>([
-			["08:30", "09:50"],
+			["08:30", "09:45"],
 			["17:30", "20:00"],
 		]),
 	},
