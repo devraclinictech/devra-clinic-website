@@ -1,7 +1,7 @@
 ---
 /**
- * ServiceCard - one service tile: icon badge, name, description.
- * Presentational; receives a single Service from the site data.
+ * ServiceCard - one service tile linking to its landing page at
+ * /services/<slug>. Icon badge, name, description and a "Learn more" affordance.
  */
 import Icon from "../ui/Icon.astro";
 import type { Service } from "../../data/site.ts";
@@ -14,10 +14,11 @@ interface Props {
 const { service, index = 0 } = Astro.props;
 ---
 
-<article
+<a
+	href={`/services/${service.slug}`}
 	data-reveal
 	style={`--reveal-delay:${index * 70}ms`}
-	class="group flex flex-col rounded-card border border-line bg-surface p-6 shadow-card transition duration-200 hover:-translate-y-1 hover:shadow-card-hover"
+	class="group flex flex-col rounded-card border border-line bg-surface p-6 shadow-card transition duration-200 hover:-translate-y-1 hover:shadow-card-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
 >
 	<span
 		class="flex h-12 w-12 items-center justify-center rounded-card bg-brand-tint text-brand transition-colors duration-200 group-hover:bg-brand group-hover:text-white"
@@ -28,4 +29,13 @@ const { service, index = 0 } = Astro.props;
 	<p class="mt-2 text-sm leading-relaxed text-ink-muted">
 		{service.description}
 	</p>
-</article>
+	<span
+		class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand"
+	>
+		Learn more
+		<Icon
+			name="arrow-right"
+			class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
+		/>
+	</span>
+</a>

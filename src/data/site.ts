@@ -100,7 +100,14 @@ export const hours = [
 
 export type Service = {
 	name: string;
+	/** URL slug for the service landing page at /services/<slug>. */
+	slug: string;
+	/** Short line used on service cards. */
 	description: string;
+	/** Longer intro paragraph for the service landing page. */
+	intro: string;
+	/** Key points shown as a checklist on the landing page. */
+	highlights: string[];
 	icon:
 		| "stethoscope"
 		| "physio"
@@ -116,56 +123,149 @@ export type Service = {
 export const services: Service[] = [
 	{
 		name: "Advanced Physiotherapy & Rehabilitation",
+		slug: "physiotherapy",
 		description:
 			"Orthopaedic, sports, post-operative, neurological and geriatric rehab, including Class 3B laser therapy for effective pain management.",
+		intro:
+			"Our physiotherapy and rehabilitation unit helps you recover movement, strength and confidence after injury, surgery or long-term pain. Sessions are led by qualified physiotherapists and tailored to your condition and goals.",
+		highlights: [
+			"Orthopaedic and post-operative rehabilitation",
+			"Sports injury assessment and recovery",
+			"Neurological and geriatric physiotherapy",
+			"Class 3B laser therapy for pain management",
+			"Personalised exercise and home-care plans",
+			"Packages available for longer treatment courses",
+		],
 		icon: "physio",
 	},
 	{
 		name: "Physician Consultation",
+		slug: "physician-consultation",
 		description:
 			"Experienced doctors in Ranchi for fevers, infections, diabetes, blood pressure, chronic disease management and preventive check-ups.",
+		intro:
+			"See an experienced physician for everyday illnesses and the ongoing management of long-term conditions. We focus on clear diagnosis, practical treatment and preventive care for the whole family.",
+		highlights: [
+			"Fever, infections and seasonal illness",
+			"Diabetes and blood pressure management",
+			"Chronic disease follow-up and monitoring",
+			"Preventive health check-ups",
+			"Guidance on tests, medicines and referrals",
+			"Morning and evening consultation slots",
+		],
 		icon: "stethoscope",
 	},
 	{
 		name: "Diagnostics & Pathology",
+		slug: "diagnostics-pathology",
 		description:
 			"Accurate blood tests, health screenings and pathology reports from an in-house lab, with quick, dependable turnaround.",
+		intro:
+			"Accurate lab testing from our in-house pathology lab, so samples are processed on site without transit delays. Reports are quick and dependable, with transparent, up-front pricing.",
+		highlights: [
+			"Routine blood tests and health screenings",
+			"In-house processing for faster reports",
+			"Diabetes, thyroid, lipid and vitamin panels",
+			"Infection and fever profiles",
+			"Clear, up-front rate chart",
+			"Home sample collection on request",
+		],
 		icon: "diagnostics",
 	},
 	{
 		name: "Pharmacy",
+		slug: "pharmacy",
 		description:
 			"An in-house pharmacy so you can collect prescribed medicines before you leave the clinic.",
+		intro:
+			"An in-house pharmacy so you can collect prescribed medicines before you leave the clinic, with no extra trip required. Our team helps you understand dosage and correct usage.",
+		highlights: [
+			"Prescribed medicines available on site",
+			"Guidance on dosage and usage",
+			"Commonly needed medicines in stock",
+			"Courier delivery to your home available",
+			"Support for repeat prescriptions",
+		],
 		icon: "pharmacy",
 	},
 	{
 		name: "Adult Vaccination",
+		slug: "adult-vaccination",
 		description:
 			"Recommended adult immunisations administered safely by our clinical team.",
+		intro:
+			"Protect yourself with recommended adult immunisations, administered safely by our clinical team. We advise on which vaccines are right for your age and health needs.",
+		highlights: [
+			"Recommended adult vaccines",
+			"Administered by trained clinical staff",
+			"Advice on timing and boosters",
+			"Safe storage and handling of vaccines",
+			"At-home vaccination available via Home Service",
+		],
 		icon: "vaccine",
 	},
 	{
 		name: "Dietician Consultation",
+		slug: "dietician-consultation",
 		description:
 			"Personalised nutrition and lifestyle guidance to support recovery, diabetes and long-term wellness.",
+		intro:
+			"Personalised nutrition and lifestyle guidance to support recovery, manage diabetes and build long-term wellness. Plans are practical and built around your routine and preferences.",
+		highlights: [
+			"Diet plans for diabetes and weight management",
+			"Nutrition support during recovery",
+			"Practical, everyday meal guidance",
+			"Lifestyle and habit coaching",
+			"Follow-up to track your progress",
+		],
 		icon: "nutrition",
 	},
 	{
 		name: "Home Service",
+		slug: "home-service",
 		description:
 			"Physiotherapy and adult vaccination at home. Medicine delivery to your door by courier is also available.",
+		intro:
+			"Care at home for patients who find it difficult to travel. Our team brings physiotherapy and adult vaccination to your door, and medicines can be delivered by courier.",
+		highlights: [
+			"Home physiotherapy sessions",
+			"Adult vaccination at home",
+			"Medicine delivery by courier",
+			"Convenient for elderly and recovering patients",
+			"Scheduled on WhatsApp at your preferred time",
+		],
 		icon: "home",
 	},
 	{
 		name: "Online Consultation",
+		slug: "online-consultation",
 		description:
 			"Consult our doctors from home over a video call, with your prescription shared on WhatsApp.",
+		intro:
+			"Consult our doctors from the comfort of home over a video call. Ideal for follow-ups, minor concerns and advice when you cannot visit in person.",
+		highlights: [
+			"Video consultation with our doctors",
+			"Convenient for follow-ups and minor concerns",
+			"Prescription shared on WhatsApp",
+			"No travel or waiting room",
+			"Easy to book on WhatsApp",
+		],
 		icon: "monitor",
 	},
 	{
 		name: "Online Review of Investigations",
+		slug: "online-review-of-investigations",
 		description:
 			"Share your test reports and get our doctors' expert review and guidance online.",
+		intro:
+			"Already have test reports? Share them with us and get an expert review and clear guidance online, without a clinic visit. We explain what your results mean and the next steps.",
+		highlights: [
+			"Expert review of your test reports",
+			"Clear explanation of your results",
+			"Guidance on next steps and treatment",
+			"Share reports easily on WhatsApp",
+			"A convenient second-opinion option",
+		],
 		icon: "monitor",
 	},
 ];

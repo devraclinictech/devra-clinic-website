@@ -1,0 +1,123 @@
+---
+/**
+ * Per-service landing page at /services/<slug>. One static page is generated
+ * for every entry in the `services` data via getStaticPaths. Rich content
+ * (intro + highlights) comes from the service record; the CTA deep-links into
+ * the booking modal with the service pre-selected.
+ */
+import Layout from "../../layouts/Layout.astro";
+import TopBar from "../../components/sections/TopBar.astro";
+import Header from "../../components/sections/Header.astro";
+import PageHeader from "../../components/sections/PageHeader.astro";
+import CtaBand from "../../components/sections/CtaBand.astro";
+import Footer from "../../components/sections/Footer.astro";
+import BookingModal from "../../components/sections/BookingModal.astro";
+import Section from "../../components/ui/Section.astro";
+import Button from "../../components/ui/Button.astro";
+import Icon from "../../components/ui/Icon.astro";
+import WhatsAppIcon from "../../components/ui/WhatsAppIcon.astro";
+import MoreLink from "../../components/ui/MoreLink.astro";
+import { services, clinic } from "../../data/site.ts";
+import type { Service } from "../../data/site.ts";
+
+export function getStaticPaths() {
+	return services.map((service) => ({
+		params: { slug: service.slug },
+		props: { service },
+	}));
+}
+
+interface Props {
+	service: Service;
+}
+
+const { service } = Astro.props;
+---
+
+<Layout
+	title={`${service.name} in Ranchi | Devra Clinic & Diagnostics`}
+	description={service.description}
+>
+	<TopBar />
+	<Header />
+	<main>
+		<PageHeader
+			crumb={service.name}
+			title={service.name}
+			subtitle={service.description}
+		/>
+
+		<Section>
+			<div class="grid gap-10 lg:grid-cols-3">
+				<!-- Content -->
+				<div class="lg:col-span-2">
+					<p class="text-lg leading-relaxed text-ink-muted">
+						{service.intro}
+					</p>
+
+					<h2 class="mt-10 text-xl font-bold text-ink">What's included</h2>
+					<ul class="mt-5 grid gap-3 sm:grid-cols-2">
+						{
+							service.highlights.map((item) => (
+								<li class="flex items-start gap-2.5 text-sm text-ink">
+									<Icon
+										name="check"
+										class="mt-0.5 h-5 w-5 shrink-0 text-brand"
+									/>
+									<span>{item}</span>
+								</li>
+							))
+						}
+					</ul>
+
+					<div class="mt-10">
+						<MoreLink href="/services" label="See all services" />
+					</div>
+				</div>
+
+				<!-- Booking card -->
+				<aside
+					class="h-max rounded-card border border-line bg-surface-alt p-6 shadow-card lg:sticky lg:top-24"
+				>
+					<span
+						class="flex h-12 w-12 items-center justify-center rounded-card bg-brand-tint text-brand"
+					>
+						<Icon name={service.icon} class="h-6 w-6" />
+					</span>
+					<h2 class="mt-4 text-lg font-bold text-ink">
+						Book {service.name}
+					</h2>
+					<p class="mt-2 text-sm leading-relaxed text-ink-muted">
+						Share a few details and we'll confirm your appointment on WhatsApp.
+						No payment needed to book.
+					</p>
+					<div class="mt-5 grid gap-3">
+						<Button
+							href={clinic.whatsappHref}
+							size="lg"
+							class="w-full"
+							data-booking-trigger="true"
+							data-service={service.name}
+						>
+							<WhatsAppIcon class="h-5 w-5" />
+							Book Appointment
+						</Button>
+						<Button
+							href={clinic.phoneHref}
+							variant="outline"
+							size="lg"
+							class="w-full"
+						>
+							<Icon name="phone" class="h-4 w-4" />
+							{clinic.phoneDisplay}
+						</Button>
+					</div>
+				</aside>
+			</div>
+		</Section>
+
+		<CtaBand />
+	</main>
+	<Footer />
+	<BookingModal />
+</Layout>
