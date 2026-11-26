@@ -520,9 +520,9 @@ const field =
 
 		document.getElementById("bk-close")?.addEventListener("click", closeDialog);
 		document.getElementById("bk-back")?.addEventListener("click", closeDialog);
-		dialog.addEventListener("click", (event) => {
-			if (event.target === dialog) closeDialog();
-		});
+		// Intentionally no backdrop-click-to-close: the modal only closes via the
+		// Close/Back buttons (or Escape), so an accidental overlay tap keeps the
+		// half-filled form instead of discarding it.
 		dialog.addEventListener("cancel", (event) => {
 			event.preventDefault();
 			closeDialog();
