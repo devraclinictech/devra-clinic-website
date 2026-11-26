@@ -89,6 +89,86 @@ export const hi: Record<string, string> = {
 	"Online Review of Investigations": "जाँचों की ऑनलाइन समीक्षा",
 	"Share your test reports and get our doctors' expert review and guidance online.":
 		"अपनी जाँच रिपोर्ट साझा करें और हमारे डॉक्टरों से ऑनलाइन विशेषज्ञ समीक्षा और मार्गदर्शन पाएँ।",
+	"Home Service": "होम सर्विस",
+	"Physiotherapy and adult vaccination at home. Medicine delivery to your door by courier is also available.":
+		"घर पर फिजियोथेरेपी और वयस्क टीकाकरण। कूरियर द्वारा आपके घर तक दवा पहुँचाने की सुविधा भी उपलब्ध है।",
+
+	// --- Service landing pages ---
+	"What's included": "क्या-क्या शामिल है",
+	"See all services": "सभी सेवाएँ देखें",
+	"Book this service": "यह सेवा बुक करें",
+	"Share a few details and we'll confirm your appointment on WhatsApp. No payment needed to book.":
+		"कुछ जानकारी साझा करें और हम आपका अपॉइंटमेंट WhatsApp पर पक्का कर देंगे। बुक करने के लिए कोई भुगतान ज़रूरी नहीं।",
+
+	// Intros
+	"Our physiotherapy and rehabilitation unit helps you recover movement, strength and confidence after injury, surgery or long-term pain. Sessions are led by qualified physiotherapists and tailored to your condition and goals.":
+		"हमारी फिजियोथेरेपी और पुनर्वास इकाई चोट, सर्जरी या लंबे समय के दर्द के बाद आपकी गतिशीलता, ताक़त और आत्मविश्वास वापस पाने में मदद करती है। सत्र योग्य फिजियोथेरेपिस्ट द्वारा संचालित होते हैं और आपकी स्थिति व लक्ष्यों के अनुसार तैयार किए जाते हैं।",
+	"See an experienced physician for everyday illnesses and the ongoing management of long-term conditions. We focus on clear diagnosis, practical treatment and preventive care for the whole family.":
+		"रोज़मर्रा की बीमारियों और लंबे समय की स्थितियों के निरंतर प्रबंधन के लिए अनुभवी फिजिशियन से मिलें। हम पूरे परिवार के लिए स्पष्ट निदान, व्यावहारिक इलाज और निवारक देखभाल पर ध्यान देते हैं।",
+	"Accurate lab testing from our in-house pathology lab, so samples are processed on site without transit delays. Reports are quick and dependable, with transparent, up-front pricing.":
+		"हमारी इन-हाउस पैथोलॉजी लैब से सटीक जाँच, ताकि सैंपल यहीं जाँचे जाएँ और ट्रांज़िट की देरी न हो। रिपोर्ट तेज़ और भरोसेमंद होती हैं, साथ में पारदर्शी और स्पष्ट मूल्य।",
+	"An in-house pharmacy so you can collect prescribed medicines before you leave the clinic, with no extra trip required. Our team helps you understand dosage and correct usage.":
+		"अपनी इन-हाउस फार्मेसी, ताकि आप क्लिनिक से निकलने से पहले ही प्रिस्क्राइब की गई दवाइयाँ ले सकें, कोई अतिरिक्त चक्कर नहीं। हमारी टीम आपको खुराक और सही उपयोग समझने में मदद करती है।",
+	"Protect yourself with recommended adult immunisations, administered safely by our clinical team. We advise on which vaccines are right for your age and health needs.":
+		"अनुशंसित वयस्क टीकों से अपनी सुरक्षा करें, जो हमारी क्लिनिकल टीम द्वारा सुरक्षित रूप से लगाए जाते हैं। हम सलाह देते हैं कि आपकी उम्र और सेहत के लिए कौन-से टीके सही हैं।",
+	"Personalised nutrition and lifestyle guidance to support recovery, manage diabetes and build long-term wellness. Plans are practical and built around your routine and preferences.":
+		"रिकवरी में मदद, मधुमेह के प्रबंधन और दीर्घकालिक सेहत के लिए व्यक्तिगत पोषण और जीवनशैली मार्गदर्शन। योजनाएँ व्यावहारिक होती हैं और आपकी दिनचर्या व पसंद के अनुसार बनाई जाती हैं।",
+	"Care at home for patients who find it difficult to travel. Our team brings physiotherapy and adult vaccination to your door, and medicines can be delivered by courier.":
+		"उन मरीज़ों के लिए घर पर देखभाल जिन्हें आना-जाना मुश्किल होता है। हमारी टीम फिजियोथेरेपी और वयस्क टीकाकरण आपके घर तक लाती है, और दवाइयाँ कूरियर से पहुँचाई जा सकती हैं।",
+	"Consult our doctors from the comfort of home over a video call. Ideal for follow-ups, minor concerns and advice when you cannot visit in person.":
+		"वीडियो कॉल पर घर बैठे आराम से हमारे डॉक्टरों से परामर्श लें। फॉलो-अप, छोटी समस्याओं और ऐसे मौक़ों के लिए उपयुक्त जब आप ख़ुद नहीं आ सकते।",
+	"Already have test reports? Share them with us and get an expert review and clear guidance online, without a clinic visit. We explain what your results mean and the next steps.":
+		"पहले से जाँच रिपोर्ट हैं? उन्हें हमारे साथ साझा करें और क्लिनिक आए बिना ऑनलाइन विशेषज्ञ समीक्षा और स्पष्ट मार्गदर्शन पाएँ। हम बताते हैं कि आपके नतीजों का क्या मतलब है और आगे क्या करना है।",
+
+	// Highlights
+	"Orthopaedic and post-operative rehabilitation": "ऑर्थोपेडिक और ऑपरेशन के बाद का पुनर्वास",
+	"Sports injury assessment and recovery": "खेल चोट का आकलन और रिकवरी",
+	"Neurological and geriatric physiotherapy": "न्यूरोलॉजिकल और वृद्धावस्था फिजियोथेरेपी",
+	"Class 3B laser therapy for pain management": "दर्द प्रबंधन के लिए क्लास 3B लेज़र थेरेपी",
+	"Personalised exercise and home-care plans": "व्यक्तिगत व्यायाम और घरेलू देखभाल योजनाएँ",
+	"Packages available for longer treatment courses": "लंबे इलाज के लिए पैकेज उपलब्ध",
+	"Fever, infections and seasonal illness": "बुखार, संक्रमण और मौसमी बीमारियाँ",
+	"Diabetes and blood pressure management": "मधुमेह और रक्तचाप का प्रबंधन",
+	"Chronic disease follow-up and monitoring": "दीर्घकालिक बीमारियों का फॉलो-अप और निगरानी",
+	"Preventive health check-ups": "निवारक स्वास्थ्य जाँच",
+	"Guidance on tests, medicines and referrals": "जाँच, दवाइयों और रेफ़रल पर मार्गदर्शन",
+	"Morning and evening consultation slots": "सुबह और शाम के परामर्श स्लॉट",
+	"Routine blood tests and health screenings": "नियमित रक्त जाँच और स्वास्थ्य स्क्रीनिंग",
+	"In-house processing for faster reports": "तेज़ रिपोर्ट के लिए इन-हाउस जाँच",
+	"Diabetes, thyroid, lipid and vitamin panels": "मधुमेह, थायरॉइड, लिपिड और विटामिन पैनल",
+	"Infection and fever profiles": "संक्रमण और बुखार प्रोफ़ाइल",
+	"Clear, up-front rate chart": "स्पष्ट, पहले से दिया गया रेट चार्ट",
+	"Home sample collection on request": "अनुरोध पर घर से सैंपल संग्रह",
+	"Prescribed medicines available on site": "प्रिस्क्राइब की गई दवाइयाँ यहीं उपलब्ध",
+	"Guidance on dosage and usage": "खुराक और उपयोग पर मार्गदर्शन",
+	"Commonly needed medicines in stock": "आम ज़रूरत की दवाइयाँ स्टॉक में",
+	"Courier delivery to your home available": "आपके घर तक कूरियर डिलीवरी उपलब्ध",
+	"Support for repeat prescriptions": "दोबारा प्रिस्क्रिप्शन के लिए सहायता",
+	"Recommended adult vaccines": "अनुशंसित वयस्क टीके",
+	"Administered by trained clinical staff": "प्रशिक्षित क्लिनिकल स्टाफ़ द्वारा लगाए जाते हैं",
+	"Advice on timing and boosters": "समय और बूस्टर पर सलाह",
+	"Safe storage and handling of vaccines": "टीकों का सुरक्षित भंडारण और रख-रखाव",
+	"At-home vaccination available via Home Service": "होम सर्विस के ज़रिए घर पर टीकाकरण उपलब्ध",
+	"Diet plans for diabetes and weight management": "मधुमेह और वज़न प्रबंधन के लिए आहार योजनाएँ",
+	"Nutrition support during recovery": "रिकवरी के दौरान पोषण सहायता",
+	"Practical, everyday meal guidance": "व्यावहारिक, रोज़मर्रा का भोजन मार्गदर्शन",
+	"Lifestyle and habit coaching": "जीवनशैली और आदतों पर कोचिंग",
+	"Follow-up to track your progress": "आपकी प्रगति पर नज़र रखने के लिए फॉलो-अप",
+	"Home physiotherapy sessions": "घर पर फिजियोथेरेपी सत्र",
+	"Adult vaccination at home": "घर पर वयस्क टीकाकरण",
+	"Medicine delivery by courier": "कूरियर द्वारा दवा डिलीवरी",
+	"Convenient for elderly and recovering patients": "बुज़ुर्गों और स्वस्थ हो रहे मरीज़ों के लिए सुविधाजनक",
+	"Scheduled on WhatsApp at your preferred time": "आपके पसंदीदा समय पर WhatsApp पर निर्धारित",
+	"Video consultation with our doctors": "हमारे डॉक्टरों के साथ वीडियो परामर्श",
+	"Convenient for follow-ups and minor concerns": "फॉलो-अप और छोटी समस्याओं के लिए सुविधाजनक",
+	"Prescription shared on WhatsApp": "प्रिस्क्रिप्शन WhatsApp पर साझा",
+	"No travel or waiting room": "न यात्रा, न प्रतीक्षा कक्ष",
+	"Easy to book on WhatsApp": "WhatsApp पर बुक करना आसान",
+	"Expert review of your test reports": "आपकी जाँच रिपोर्ट की विशेषज्ञ समीक्षा",
+	"Clear explanation of your results": "आपके नतीजों की स्पष्ट व्याख्या",
+	"Guidance on next steps and treatment": "आगे के कदमों और इलाज पर मार्गदर्शन",
+	"Share reports easily on WhatsApp": "WhatsApp पर रिपोर्ट आसानी से साझा करें",
+	"A convenient second-opinion option": "सुविधाजनक सेकंड-ओपिनियन विकल्प",
 
 	// --- Doctors ---
 	"Our medical specialists": "हमारे चिकित्सा विशेषज्ञ",
